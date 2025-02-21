@@ -8,7 +8,7 @@ import com.accenture.service.dto.ClientResponseDTO;
 import com.accenture.service.mapper.ClientMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.List;
 
 
 @Service
@@ -23,8 +23,14 @@ public class ClientServiceImpl implements ClientService{
         this.clientMapper = clientMapper;
     }
 
+    /**
+     * Méthode Ajouter(ClientRequestDTO clientRequestDTO)
+     * @param clientRequestDTO L'objet métier Client en base qui contient tous les attribus de Client
+     * @return  retourne ClientResponseDTO
+     * @throws ClientException Si le client ne suis pas les contraintes établies pour l'inscription
+     */
     @Override
-    public ClientResponseDTO ajouter(ClientRequestDTO clientRequestDTO) {
+    public ClientResponseDTO ajouter(ClientRequestDTO clientRequestDTO) throws ClientException{
         verifierClient(clientRequestDTO);
         Client client = clientMapper.toClient(clientRequestDTO);
 //        client.setDateDInscription(LocalDate.now());
@@ -34,35 +40,53 @@ public class ClientServiceImpl implements ClientService{
         return clientMapper.toClientResponseDTO(clientRetour);}
 
     @Override
-    public ClientResponseDTO trouver(int id) throws ClientException {
+    public ClientResponseDTO trouver(String email) throws ClientException {
         return null;
     }
 
     @Override
-    public ClientResponseDTO modifier(int id, ClientRequestDTO clientRequestDTO) throws ClientException {
-        if (!clientDAO.existsById(id)) throw new ClientException("ID non trouvée");
+    public ClientResponseDTO modifier(String email, ClientRequestDTO clientRequestDTO) throws ClientException {
+        if (!clientDAO.existsById(email)) throw new ClientException("ID non trouvée");
         Client client = clientMapper.toClient(clientRequestDTO);
-        client.setId(id);
+
 
         Client clientEnreg = clientDAO.save(client);
         return clientMapper.toClientResponseDTO(clientEnreg);    }
 
     @Override
-    public void supprimer(int id) throws ClientException {
-        if (clientDAO.existsById(id))
-            clientDAO.deleteById(id);
+    public void supprimer(String email) throws ClientException {
+        if (clientDAO.existsById(email))
+            clientDAO.deleteById(email);
         else
             throw new ClientException("L'id ne correspond a rien !");
     }
+    @Override
+   public List<ClientResponseDTO> liste(){
+       List<Client> listeC = clientDAO.findAll();
+       return listeC.stream()
+               .map(clientMapper::toClientResponseDTO)
+               .toList();
+   }
+
 
 
     private static void verifierClient(ClientRequestDTO clientRequestDTO) throws ClientException{
-        if (clientRequestDTO.adresse().getNumero() == 0)
+        if (clientRequestDTO == null)
+            throw new ClientException("Le client ne peux pas être null");
+        if (clientRequestDTO.adresse() ==null)
+            throw new ClientException("L'adresse est obligatoire");
+        if (clientRequestDTO.adresse().numero() == 0)
             throw new ClientException("Le numéro de l'adresse est invalide");
-        if (clientRequestDTO.adresse().getRue() == null || clientRequestDTO.adresse().getRue().isBlank())
+        if (clientRequestDTO.adresse().rue() == null || clientRequestDTO.adresse().rue().isBlank())
             throw new ClientException("La rue est invalide ou vide");
-        if (clientRequestDTO.adresse().getCodePostal() == null || clientRequestDTO.adresse().getCodePostal().isBlank())
+        if (clientRequestDTO.adresse().codePostal() == null || clientRequestDTO.adresse().codePostal().isBlank())
             throw new ClientException("le code postal est null ou vide");
+        if (clientRequestDTO.adresse().ville() == null || clientRequestDTO.adresse().ville().isBlank())
+            throw new ClientException("La ville ne peu pas être vide");
+        if (clientRequestDTO.nom() == null || clientRequestDTO.nom().isBlank())
+            throw new ClientException("Le nom ne peu pas être null");
+        if (clientRequestDTO.prenom() == null || clientRequestDTO.prenom().isBlank())
+            throw new ClientException("Le prenom ne peu pas être null");
         if (clientRequestDTO.dateDeNaissance()== null)
             throw new ClientException("La date de naissance est vide");
         if (clientRequestDTO.dateInscription() == null)

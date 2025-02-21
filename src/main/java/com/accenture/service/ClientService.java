@@ -5,11 +5,14 @@ import com.accenture.exception.ClientException;
 import com.accenture.service.dto.ClientRequestDTO;
 import com.accenture.service.dto.ClientResponseDTO;
 
+import java.util.List;
+
 
 public interface ClientService {
     public ClientResponseDTO ajouter(ClientRequestDTO dto);
-    public ClientResponseDTO trouver(int id) throws ClientException;
-    ClientResponseDTO modifier(int id, ClientRequestDTO clientRequestDTO) throws ClientException;
-    public void supprimer(int id) throws ClientException;
+    public List<ClientResponseDTO> liste();
+    public ClientResponseDTO trouver(String email) throws ClientException;
+    ClientResponseDTO modifier(String email, ClientRequestDTO clientRequestDTO) throws ClientException;
+    public void supprimer(String email) throws ClientException;
 
 }

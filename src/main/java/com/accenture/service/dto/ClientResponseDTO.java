@@ -7,15 +7,13 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public record ClientResponseDTO(
-        int id,
-        Adresse adresse,
+        AdresseDTO adresse,
         String nom,
         String prenom,
         LocalDate dateDeNaissance,
         LocalDate dateInscription,
-        HashSet<Permis>listePermis,
+        HashSet<Permis> listePermis,
         Boolean desactive,
-        String password,
         String email
 ) {
 }

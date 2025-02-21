@@ -1,5 +1,14 @@
 package com.accenture.repository.entity;
 
-public class Administrateur extends UtilisateurConnecte{
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+public class Administrateur extends UtilisateurConnecte{
+        private String fonction;
 }
