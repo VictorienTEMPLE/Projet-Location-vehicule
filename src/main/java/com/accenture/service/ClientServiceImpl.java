@@ -9,6 +9,7 @@ import com.accenture.service.mapper.ClientMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -58,7 +59,7 @@ public class ClientServiceImpl implements ClientService{
         if (clientDAO.existsById(email))
             clientDAO.deleteById(email);
         else
-            throw new ClientException("L'id ne correspond a rien !");
+            throw new ClientException("L'email ne correspond à aucun compte !");
     }
     @Override
    public List<ClientResponseDTO> liste(){
@@ -66,6 +67,16 @@ public class ClientServiceImpl implements ClientService{
        return listeC.stream()
                .map(clientMapper::toClientResponseDTO)
                .toList();
+   }
+
+   @Override
+   public ClientResponseDTO trouverUserParEmailEtPassword(String email, String password){
+       Optional<Client> optClient = clientDAO.findByEmailAndPassword(email,password);
+       // Si Optclient vide > Exception sinon renvoyer le Mapper du client.
+       if (optClient.isEmpty())
+           throw new ClientException("Il faut les paramètre requis pour proceder à la recherche");
+       else
+           return clientMapper.toClientResponseDTO(optClient.get());
    }
 
 

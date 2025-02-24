@@ -15,7 +15,7 @@ import java.util.HashSet;
 @DiscriminatorValue("Client")
 public class Client extends UtilisateurConnecte{
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Adresse adresse;
     private LocalDate dateDeNaissance;
     private LocalDate dateInscription;

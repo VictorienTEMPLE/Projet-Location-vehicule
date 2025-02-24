@@ -2,8 +2,10 @@ package com.accenture.service;
 
 import com.accenture.exception.ClientException;
 import com.accenture.repository.ClientDAO;
+import com.accenture.repository.entity.Client;
 import com.accenture.repository.entity.Adresse;
 import com.accenture.repository.entity.Client;
+import com.accenture.service.dto.ClientResponseDTO;
 import com.accenture.service.dto.AdresseDTO;
 import com.accenture.service.dto.ClientRequestDTO;
 import com.accenture.service.dto.ClientResponseDTO;
@@ -18,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
@@ -121,7 +124,7 @@ class ClientServiceImplTest {
 
     private static Client creerClientProfilPourTest() {
         Client c = new Client();
-        c.setAdresse(new Adresse(1,12,"Rue JoeLeptit", "44800","Saint-Herblain"));
+        c.setAdresse(new Adresse(1,3,"Rue JoeLeptit", "44800","Saint-Herblain"));
         c.setNom("Legrand");
         c.setPrenom("Joe");
         c.setDateDeNaissance(LocalDate.of(2004,8,12));
@@ -136,7 +139,41 @@ class ClientServiceImplTest {
     private static ClientResponseDTO creerClientResponseDTOExample(){
         HashSet<Permis> permis1 = new HashSet<>();
         permis1.add(Permis.B);
-        return new ClientResponseDTO(new AdresseDTO(3,"Rue JoeLeptit", "44800","Saint-Herblain"),"Legrand","Jack",LocalDate.of(2004,8,12),LocalDate.of(2025,8,12), permis1,false,"emailfun@email.com");
+        return new ClientResponseDTO(new AdresseDTO(3,"Rue JoeLeptit", "44800","Saint-Herblain"),"Legrand","Jack",LocalDate.of(2004,8,12),LocalDate.of(2025,8,12), permis1,false,"ceciestuneemail@email.com");
+    }
+
+
+    private static ClientResponseDTO creerClientResponseDTOExample2(){
+        HashSet<Permis> permis2 = new HashSet<>();
+        permis2.add(Permis.B);
+        return new ClientResponseDTO(new AdresseDTO(12,"Rue JoeLeptit", "44800","Saint-Herblain"),"Legrand","Joe",LocalDate.of(2004,8,12),LocalDate.of(2025,8,12),permis2,false,"emailfun@email.com");
+    }
+
+    @Test
+    void listeclient() {
+        Client client1 = creerClientProfilPourTest();
+        Client client2 = new Client();
+        client2.setAdresse(new Adresse(1,12,"Rue JoeLeptit", "44800","Saint-Herblain"));
+        client2.setNom("Legrand");
+        client2.setPrenom("Joe");
+        client2.setDateDeNaissance(LocalDate.of(2004,8,12));
+        client2.setDateInscription(LocalDate.of(2025,8,12));
+        client2.setListePermis(new HashSet<Permis>());
+        client2.getListePermis().add(Permis.B);
+        client2.setDesactive(false);
+        client2.setPassword("P@ssword2");
+        client2.setEmail("ceciestuneemail@email.com");
+
+
+        List<Client> client = List.of(client1,client2);
+
+        List<ClientResponseDTO> dtolist = List.of(creerClientResponseDTOExample(),creerClientResponseDTOExample2());
+
+        Mockito.when(daoMock.findAll()).thenReturn(client);
+        Mockito.when(mapperMock.toClientResponseDTO(client1)).thenReturn(creerClientResponseDTOExample());
+        Mockito.when(mapperMock.toClientResponseDTO(client2)).thenReturn(creerClientResponseDTOExample2());
+
+        assertEquals(dtolist,service.liste());
     }
 
 
