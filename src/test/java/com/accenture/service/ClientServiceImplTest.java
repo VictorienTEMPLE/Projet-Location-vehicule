@@ -238,12 +238,6 @@ class ClientServiceImplTest {
 
     }
 
-    //    @Override
-//    public void supprimer(String email, String password) throws ClientException {
-//        Client client = clientDAO.findByEmailAndPassword(email, password)
-//                .orElseThrow(() -> new ClientException("Le compte que vous chercher a supprimer n'existe pas..."));
-//        clientDAO.delete(client);
-//    }
     private static Client clientProfilPourTests2() {
         Client c = new Client();
         c.setAdresse(new Adresse(1, 15, "Rue JoeLeptit", "44800", "Saint-Herblain"));
@@ -260,6 +254,38 @@ class ClientServiceImplTest {
     }
 
 
+    @Test
+    void testModifierSansEmail(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier(null, "P@ssword1", dto ));
+    }
+
+    @Test
+    void testModifierSansPassword(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", null, dto ));
+    }
+
+    @Test
+    void testModifierSansRequestDTO(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "P@ssword1", null ));
+    }
+
+    @Test
+
+    void testModifierOk(){
+
+    }
+//    @Override
+//    public ClientResponseDTO modifier(String email, String password, ClientRequestDTO clientRequestDTO) throws ClientException {
+//        if (clientDAO.findByEmailAndPassword(email, password).isEmpty()) throw new ClientException("ID non trouvée");
+//        Client client = clientMapper.toClient(clientRequestDTO);
+//
+//
+//        Client clientEnreg = clientDAO.save(client);
+//        return clientMapper.toClientResponseDTO(clientEnreg);
+//    }
 
 }
 

@@ -6,9 +6,11 @@ import com.accenture.repository.entity.Client;
 import com.accenture.service.dto.ClientRequestDTO;
 import com.accenture.service.dto.ClientResponseDTO;
 import com.accenture.service.mapper.ClientMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -55,8 +57,31 @@ public class ClientServiceImpl implements ClientService {
         Client clientEnreg = clientDAO.save(client);
         return clientMapper.toClientResponseDTO(clientEnreg);
     }
-
-
+    //a faire modifier partiellement
+    public ClientResponseDTO modifierPartiellement(int id, ClientRequestDTO clientRequestDTO) throws ClientException {
+        //Client clientExistante = trouver(id);
+        // remplacer(client, clientExistante);
+        //  verifierClient(clientExistante);
+        // return clientDAO.save(clientExistante);
+        Optional<Client> optClient = clientDAO.findById(id);
+        if(optClient.isEmpty()) throw new EntityNotFoundException(ID_NON_PRESENT);
+        Client nouvelle = clientMapper.toClient(clientRequestDTO);
+        Client clientExistante = optClient.get();
+        remplacer(nouvelle, clientExistante);
+        Client clientEnreg = clientDAO.save(clientExistante);
+        return clientMapper.toClientResponseDTO(clientEnreg);
+    }
+//TODO finir la méthode pour demain
+    private static void remplacer(Client client, Client clientExistante) {
+//        if(client.getEmail()!=null)
+//            clientExistante.setEmail(client.getEmail());
+//        if(client.getPassword()!=null)
+//            clientExistante.setPassword(client.getPassword());
+//        if (client.getAdresse().getCodePostal() != 0)
+//            clientExistante.setAdresse(client.getAdresse().getCodePostal());
+//        if (client.getDateDeNaissance()!=null)
+//            clientExistante.setDateLimite(client.getDateLimite());
+    }
     /**
      * Méthode supprimer(String email, String passwrod)
      * @param email Requiert un string email pour trouver l'objet correspondant en base
