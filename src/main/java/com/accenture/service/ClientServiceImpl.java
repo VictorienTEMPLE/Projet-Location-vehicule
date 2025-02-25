@@ -9,15 +9,14 @@ import com.accenture.service.mapper.ClientMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
-public class ClientServiceImpl implements ClientService{
+public class ClientServiceImpl implements ClientService {
     public static final String ID_NON_PRESENT = "id non present";
     private final ClientDAO clientDAO;
     private final ClientMapper clientMapper;
-    private static final String REGEX_MDP ="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#@&-_§]).{8,16}$";
+    private static final String REGEX_MDP = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#@&-_§]).{8,16}$";
 
     public ClientServiceImpl(ClientDAO clientDAO, ClientMapper clientMapper) {
         this.clientDAO = clientDAO;
@@ -26,19 +25,21 @@ public class ClientServiceImpl implements ClientService{
 
     /**
      * Méthode Ajouter(ClientRequestDTO clientRequestDTO)
+     *
      * @param clientRequestDTO L'objet métier Client en base qui contient tous les attribus de Client
-     * @return  retourne ClientResponseDTO
+     * @return retourne ClientResponseDTO
      * @throws ClientException Si le client ne suis pas les contraintes établies pour l'inscription
      */
     @Override
-    public ClientResponseDTO ajouter(ClientRequestDTO clientRequestDTO) throws ClientException{
+    public ClientResponseDTO ajouter(ClientRequestDTO clientRequestDTO) throws ClientException {
         verifierClient(clientRequestDTO);
         Client client = clientMapper.toClient(clientRequestDTO);
 //        client.setDateDInscription(LocalDate.now());
         client.setDesactive(false);
         System.out.println(client);
         Client clientRetour = clientDAO.save(client);
-        return clientMapper.toClientResponseDTO(clientRetour);}
+        return clientMapper.toClientResponseDTO(clientRetour);
+    }
 
     @Override
     public ClientResponseDTO trouver(String email) throws ClientException {
@@ -46,45 +47,67 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public ClientResponseDTO modifier(String email, ClientRequestDTO clientRequestDTO) throws ClientException {
-        if (!clientDAO.existsById(email)) throw new ClientException("ID non trouvée");
+    public ClientResponseDTO modifier(String email, String password, ClientRequestDTO clientRequestDTO) throws ClientException {
+        if (clientDAO.findByEmailAndPassword(email, password).isEmpty()) throw new ClientException("ID non trouvée");
         Client client = clientMapper.toClient(clientRequestDTO);
 
 
         Client clientEnreg = clientDAO.save(client);
-        return clientMapper.toClientResponseDTO(clientEnreg);    }
-
-    @Override
-    public void supprimer(String email) throws ClientException {
-        if (clientDAO.existsById(email))
-            clientDAO.deleteById(email);
-        else
-            throw new ClientException("L'email ne correspond à aucun compte !");
+        return clientMapper.toClientResponseDTO(clientEnreg);
     }
+
+
+    /**
+     * Méthode supprimer(String email, String passwrod)
+     * @param email Requiert un string email pour trouver l'objet correspondant en base
+     * @param password Requiert un string password pour trouver l'objet correspondant en base
+     * @throws ClientException renvoie une clientException si les contraintes ne sont pas suivies
+     */
     @Override
-   public List<ClientResponseDTO> liste(){
-       List<Client> listeC = clientDAO.findAll();
-       return listeC.stream()
-               .map(clientMapper::toClientResponseDTO)
-               .toList();
-   }
+    public void supprimer(String email, String password) throws ClientException {
+        Client client = clientDAO.findByEmailAndPassword(email, password)
+                .orElseThrow(() -> new ClientException("Le compte que vous chercher a supprimer n'existe pas..."));
+        clientDAO.delete(client);
+    }
 
-   @Override
-   public ClientResponseDTO trouverUserParEmailEtPassword(String email, String password){
-       Optional<Client> optClient = clientDAO.findByEmailAndPassword(email,password);
-       // Si Optclient vide > Exception sinon renvoyer le Mapper du client.
-       if (optClient.isEmpty())
-           throw new ClientException("Il faut les paramètre requis pour proceder à la recherche");
-       else
-           return clientMapper.toClientResponseDTO(optClient.get());
-   }
+    /**
+     * méthode Liste()
+     * @return retourne la liste complète de tous les objet Client en base
+     */
+    @Override
+    public List<ClientResponseDTO> liste() {
+        List<Client> listeC = clientDAO.findAll();
+        return listeC.stream()
+                .map(clientMapper::toClientResponseDTO)
+                .toList();
+    }
+
+    /**
+     * Méthode trouverClientParEmailEtPassword(String email, String password)
+     * @param email requiert un paramètre String email
+     * @param password requiert un paramètre String password
+     * @return retourne l'objet client correspondant aux String email et String password donné.
+     */
+
+    @Override
+    public ClientResponseDTO trouverClientParEmailEtPassword(String email, String password) {
+        // Si Optclient vide > Exception sinon renvoyer le Mapper du client.
+        if (email == null || email.isBlank())
+            throw new ClientException("L'email est obligatoire");
+        if (password == null || password.isBlank())
+            throw new ClientException("Le mot de passe est obligatoire");
+        return clientMapper.toClientResponseDTO(
+                clientDAO
+                        .findByEmailAndPassword(email, password)
+                        .orElseThrow(() -> new ClientException("Il faut les paramètre requis pour proceder à la recherche"))
+        );
+    }
 
 
-
-    private static void verifierClient(ClientRequestDTO clientRequestDTO) throws ClientException{
+    private static void verifierClient(ClientRequestDTO clientRequestDTO) throws ClientException {
         if (clientRequestDTO == null)
             throw new ClientException("Le client ne peux pas être null");
-        if (clientRequestDTO.adresse() ==null)
+        if (clientRequestDTO.adresse() == null)
             throw new ClientException("L'adresse est obligatoire");
         if (clientRequestDTO.adresse().numero() == 0)
             throw new ClientException("Le numéro de l'adresse est invalide");
@@ -98,7 +121,7 @@ public class ClientServiceImpl implements ClientService{
             throw new ClientException("Le nom ne peu pas être null");
         if (clientRequestDTO.prenom() == null || clientRequestDTO.prenom().isBlank())
             throw new ClientException("Le prenom ne peu pas être null");
-        if (clientRequestDTO.dateDeNaissance()== null)
+        if (clientRequestDTO.dateDeNaissance() == null)
             throw new ClientException("La date de naissance est vide");
         if (clientRequestDTO.dateInscription() == null)
             throw new ClientException("La date d'inscription est vide");

@@ -3,6 +3,7 @@ package com.accenture.controller;
 import com.accenture.service.AdministrateurService;
 import com.accenture.service.dto.AdministrateurRequestDTO;
 import com.accenture.service.dto.AdministrateurResponseDTO;
+import com.accenture.service.dto.ClientRequestDTO;
 import com.accenture.service.dto.ClientResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,10 @@ public class AdministrateurController {
     public AdministrateurResponseDTO info(String email, String password){
         return administrateurService.trouverAdminParEmailEtPassword(email,password);
     }
-
+    @PutMapping("/modifier")
+    ResponseEntity<AdministrateurResponseDTO> modifier(String email, String password,@RequestBody AdministrateurRequestDTO administrateurRequestDTO){
+        administrateurService.modifier(email, password, administrateurRequestDTO);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 }

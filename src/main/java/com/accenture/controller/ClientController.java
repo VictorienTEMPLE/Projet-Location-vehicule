@@ -33,7 +33,18 @@ public class ClientController {
 
     @GetMapping("/info")
     public ClientResponseDTO info( String email, String password){
-    return clientService.trouverUserParEmailEtPassword(email,password);
+    return clientService.trouverClientParEmailEtPassword(email,password);
     }
 
+    @DeleteMapping("/delete")
+    ResponseEntity<Void> delete( String email, String password){
+        clientService.supprimer(email, password);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/modifier")
+    ResponseEntity<ClientResponseDTO> modifier(String email, String password,@RequestBody ClientRequestDTO clientRequestDTO){
+        clientService.modifier(email, password, clientRequestDTO);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

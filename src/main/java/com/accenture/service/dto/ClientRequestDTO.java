@@ -10,9 +10,9 @@ public record ClientRequestDTO(
          String nom,
          String prenom,
          LocalDate dateDeNaissance,
-         LocalDate dateInscription,
+         LocalDate dateInscription, // a retirer
          HashSet<Permis>listePermis,
-         Boolean desactive,
+         Boolean desactive,     //a retirer
          String password,
          String email
          ) {

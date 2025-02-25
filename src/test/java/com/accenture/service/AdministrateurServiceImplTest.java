@@ -146,12 +146,24 @@ class AdministrateurServiceImplTest {
         AdministrateurResponseDTO a = new AdministrateurResponseDTO("Joestar","Johnathan","sympa@email.com","Administrateur");
         return a;
     }
-//    public AdministrateurResponseDTO trouverAdminParEmailEtPassword(String email, String password){
-//        Optional<Administrateur> optAdmin = administrateurDAO.findByEmailAndPassword(email,password);
-//        // Si Optclient vide > Exception sinon renvoyer le Mapper du client.
-//        if (optAdmin.isEmpty())
-//            throw new ClientException("Il faut les paramètre requis pour proceder à la recherche");
-//        else
-//            return administrateurMapper.toAdministrateurResponseDTO(optAdmin.get());
-//    }
+
+    @Test
+    void testSupprimerSansEmail(){
+        assertThrows(AdministrateurException.class, () -> service.supprimer(null, "P@ssword1"));
+    }
+
+    @Test
+    void testSupprimerSansMotDePasse(){
+        assertThrows(AdministrateurException.class, () -> service.supprimer("email1@email.com", "null"));
+    }
+
+    @Test
+    void testSupprimerOk(){
+        Administrateur administrateur1 = adminProfilPourTests();
+        Mockito.when(daoMock.findByEmailAndPassword(administrateur1.getEmail(),administrateur1.getPassword())).thenReturn(Optional.of(administrateur1));
+        service.supprimer(administrateur1.getEmail(),administrateur1.getPassword());
+        Mockito.verify(daoMock, Mockito.times(1)).delete(administrateur1);
+
+    }
+
 }

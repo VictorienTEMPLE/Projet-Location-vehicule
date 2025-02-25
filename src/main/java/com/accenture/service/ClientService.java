@@ -14,9 +14,10 @@ public interface ClientService {
     public ClientResponseDTO ajouter(ClientRequestDTO dto);
     public List<ClientResponseDTO> liste();
     public ClientResponseDTO trouver(String email) throws ClientException;
-    ClientResponseDTO modifier(String email, ClientRequestDTO clientRequestDTO) throws ClientException;
-    public void supprimer(String email) throws ClientException;
+    ClientResponseDTO modifier(String email, String password, ClientRequestDTO clientRequestDTO) throws ClientException;
+    public void supprimer(String email, String password) throws ClientException;
 
 
-    public ClientResponseDTO trouverUserParEmailEtPassword(String email, String password);
+
+        public ClientResponseDTO trouverClientParEmailEtPassword(String email, String password);
 }
