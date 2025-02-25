@@ -56,13 +56,18 @@ public class AdministrateurServiceImpl implements AdministrateurService{
 
 
     @Override
-    public AdministrateurResponseDTO trouverAdminParEmailEtPassword(String email, String password){
-        Optional<Administrateur> optAdmin = administrateurDAO.findByEmailAndPassword(email,password);
+    public AdministrateurResponseDTO trouverAdminParEmailEtPassword(String email, String password) {
+        Optional<Administrateur> optAdmin = administrateurDAO.findByEmailAndPassword(email, password);
         // Si Optclient vide > Exception sinon renvoyer le Mapper du client.
-        if (optAdmin.isEmpty())
-            throw new AdministrateurException("Il faut les paramètre requis pour proceder à la recherche");
-        else
-            return administrateurMapper.toAdministrateurResponseDTO(optAdmin.get());
+        if (email == null || email.isBlank())
+            throw new AdministrateurException("L'email est obligatoire");
+        if (password == null || password.isBlank())
+            throw new AdministrateurException("Le mot de passe est obligatoire");
+        return administrateurMapper.toAdministrateurResponseDTO(
+                administrateurDAO
+                        .findByEmailAndPassword(email, password)
+                        .orElseThrow(() -> new AdministrateurException("Il faut les paramètre requis pour proceder à la recherche"))
+        );
     }
 
 
