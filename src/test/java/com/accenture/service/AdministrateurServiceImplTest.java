@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +26,11 @@ class AdministrateurServiceImplTest {
     AdministrateurMapper mapperMock;
     @InjectMocks //on créer le new tachServiceImpl ici
     AdministrateurServiceImpl service;
+
+    private AdministrateurRequestDTO adminRequestDTOUn(){
+        AdministrateurRequestDTO dto = new AdministrateurRequestDTO( "Legrand", "Joe",  "P@ssword1", "blablabla@mail.com","Administrateur");
+        return dto;
+    }
 
 
     @Test
@@ -164,6 +168,39 @@ class AdministrateurServiceImplTest {
         service.supprimer(administrateur1.getEmail(),administrateur1.getPassword());
         Mockito.verify(daoMock, Mockito.times(1)).delete(administrateur1);
 
+    }
+
+
+    @Test
+    void testModifierSansEmail(){
+        AdministrateurRequestDTO dto = new AdministrateurRequestDTO("Legrand", "Joe", "P@ssword1", "sympa@email.com","Administrateur");
+        assertThrows(AdministrateurException.class, ()-> service.modifier(null, "P@ssword1", dto ));
+    }
+
+    @Test
+    void testModifierSansPassword(){
+        AdministrateurRequestDTO dto = new AdministrateurRequestDTO("Legrand", "Joe", "P@ssword1", "sympa@email.com","Administrateur");
+        assertThrows(AdministrateurException.class, ()-> service.modifier("sympa@email.com", null, dto ));
+    }
+
+    @Test
+    void testModifierSansRequestDTO(){
+        AdministrateurRequestDTO dto = new AdministrateurRequestDTO("Legrand", "Joe", "P@ssword1", "sympa@email.com","Administrateur");
+        assertThrows(AdministrateurException.class, ()-> service.modifier("sympa@email.com", "P@ssword1", null ));
+    }
+
+    @Test
+    void testModifierSansFonction(){
+        AdministrateurRequestDTO dto = new AdministrateurRequestDTO("Legrand", "Joe", "P@ssword1", "sympa@email.com",null);
+        assertThrows(AdministrateurException.class, ()-> service.modifier("sympa@email.com", "P@ssword1", dto ));
+    }
+
+    @Test
+    void testModifierOk(){
+        Administrateur admin =  adminProfilPourTests();
+        Mockito.when(mapperMock.toAdministrateur(adminRequestDTOUn())).thenReturn(admin);
+        Mockito.when(daoMock.findByEmailAndPassword(admin.getEmail(),admin.getPassword())).thenReturn(Optional.of(admin));
+        service.modifier(admin.getEmail(),admin.getPassword(),adminRequestDTOUn());
     }
 
 }

@@ -33,6 +33,14 @@ class ClientServiceImplTest {
     ClientServiceImpl service;
     HashSet<Permis> permis = new HashSet<Permis>();
 
+    private  ClientRequestDTO clientRequestDTOUn(){
+        HashSet<Permis> permis = new HashSet<>();
+        permis.add(Permis.B);
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(0, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
+    return dto;
+    }
+
+
     @Test
     void testAjouterNull() {
         assertThrows(ClientException.class, () -> service.ajouter(null));
@@ -273,17 +281,19 @@ class ClientServiceImplTest {
     }
 
     @Test
-
     void testModifierOk(){
-
+        Client client =  clientProfilPourTests();
+        Mockito.when(mapperMock.toClient(clientRequestDTOUn())).thenReturn(client);
+        Mockito.when(daoMock.findByEmailAndPassword(client.getEmail(),client.getPassword())).thenReturn(Optional.of(client));
+        service.modifier(client.getEmail(),client.getPassword(),clientRequestDTOUn());
     }
-//    @Override
 //    public ClientResponseDTO modifier(String email, String password, ClientRequestDTO clientRequestDTO) throws ClientException {
-//        if (clientDAO.findByEmailAndPassword(email, password).isEmpty()) throw new ClientException("ID non trouvée");
+//        Optional<Client> optClient = clientDAO.findByEmailAndPassword(email,password);
+//        if(optClient.isEmpty()) throw new ClientException("Le compte que vous chercher n'existe pas");
 //        Client client = clientMapper.toClient(clientRequestDTO);
-//
-//
-//        Client clientEnreg = clientDAO.save(client);
+//        Client clientExistant = optClient.get();
+//        remplacer(client, clientExistant);
+//        Client clientEnreg = clientDAO.save(clientExistant);
 //        return clientMapper.toClientResponseDTO(clientEnreg);
 //    }
 

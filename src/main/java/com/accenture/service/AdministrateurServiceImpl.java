@@ -1,18 +1,15 @@
 package com.accenture.service;
 
 import com.accenture.exception.AdministrateurException;
-import com.accenture.exception.ClientException;
 import com.accenture.repository.AdministrateurDAO;
 import com.accenture.repository.entity.Administrateur;
-import com.accenture.repository.entity.Client;
 import com.accenture.service.dto.AdministrateurRequestDTO;
 import com.accenture.service.dto.AdministrateurResponseDTO;
-import com.accenture.service.dto.ClientRequestDTO;
-import com.accenture.service.dto.ClientResponseDTO;
 import com.accenture.service.mapper.AdministrateurMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -29,7 +26,7 @@ public class AdministrateurServiceImpl implements AdministrateurService {
     /**
      * Méthode Ajouter(AdministrateurRequestDTO AdministrateurRequestDTO)
      *
-     * @param administrateurRequestDTO L'objet métier Client en base qui contient tous les attribus de Adminitrateur
+     * @param administrateurRequestDTO L'objet métier Administrateur en base qui contient tous les attribus de Adminitrateur
      * @return retourne AdministrateurResponseDTO
      * @throws AdministrateurException Si l'administrateur ne suis pas les contraintes établies pour l'enregistrement d'un nouvel Admin.
      */
@@ -77,14 +74,29 @@ public class AdministrateurServiceImpl implements AdministrateurService {
         administrateurDAO.delete(admin);
     }
 
+
     @Override
     public AdministrateurResponseDTO modifier(String email, String password, AdministrateurRequestDTO administrateurRequestDTO) throws AdministrateurException {
-        if (administrateurDAO.findByEmailAndPassword(email, password).isEmpty()) throw new AdministrateurException("ID non trouvée");
+        Optional<Administrateur> optAdministrateur = administrateurDAO.findByEmailAndPassword(email,password);
+        if(optAdministrateur.isEmpty()) throw new AdministrateurException("Le compte que vous chercher n'existe pas");
         Administrateur administrateur = administrateurMapper.toAdministrateur(administrateurRequestDTO);
-
-
-        Administrateur administrateurEnreg = administrateurDAO.save(administrateur);
+        Administrateur administrateurExistant = optAdministrateur.get();
+        remplacer(administrateur, administrateurExistant);
+        Administrateur administrateurEnreg = administrateurDAO.save(administrateurExistant);
         return administrateurMapper.toAdministrateurResponseDTO(administrateurEnreg);
+    }
+
+    private static void remplacer(Administrateur nouveauAdministrateur, Administrateur administrateurExistante) {
+        if(nouveauAdministrateur.getEmail()!=null)
+            administrateurExistante.setEmail(nouveauAdministrateur.getEmail());
+        if(nouveauAdministrateur.getPassword()!=null)
+            administrateurExistante.setPassword(nouveauAdministrateur.getPassword());
+        if (nouveauAdministrateur.getNom() !=null)
+            administrateurExistante.setNom(nouveauAdministrateur.getNom());
+        if (nouveauAdministrateur.getPrenom() !=null)
+            administrateurExistante.setPrenom(nouveauAdministrateur.getPrenom());
+        if (nouveauAdministrateur.getFonction() !=null)
+            administrateurExistante.setFonction(nouveauAdministrateur.getFonction());
     }
 
     /**

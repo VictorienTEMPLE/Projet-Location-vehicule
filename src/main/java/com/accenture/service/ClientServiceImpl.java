@@ -50,40 +50,37 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDTO modifier(String email, String password, ClientRequestDTO clientRequestDTO) throws ClientException {
-        if (clientDAO.findByEmailAndPassword(email, password).isEmpty()) throw new ClientException("ID non trouvée");
+        Optional<Client> optClient = clientDAO.findByEmailAndPassword(email,password);
+        if(optClient.isEmpty()) throw new ClientException("Le compte que vous chercher n'existe pas");
         Client client = clientMapper.toClient(clientRequestDTO);
-
-
-        Client clientEnreg = clientDAO.save(client);
+        Client clientExistant = optClient.get();
+        remplacer(client, clientExistant);
+        Client clientEnreg = clientDAO.save(clientExistant);
         return clientMapper.toClientResponseDTO(clientEnreg);
     }
-    //a faire modifier partiellement
-    public ClientResponseDTO modifierPartiellement(int id, ClientRequestDTO clientRequestDTO) throws ClientException {
-        //Client clientExistante = trouver(id);
-        // remplacer(client, clientExistante);
-        //  verifierClient(clientExistante);
-        // return clientDAO.save(clientExistante);
-        Optional<Client> optClient = clientDAO.findById(id);
-        if(optClient.isEmpty()) throw new EntityNotFoundException(ID_NON_PRESENT);
-        Client nouvelle = clientMapper.toClient(clientRequestDTO);
-        Client clientExistante = optClient.get();
-        remplacer(nouvelle, clientExistante);
-        Client clientEnreg = clientDAO.save(clientExistante);
-        return clientMapper.toClientResponseDTO(clientEnreg);
-    }
-//TODO finir la méthode pour demain
-    private static void remplacer(Client client, Client clientExistante) {
-//        if(client.getEmail()!=null)
-//            clientExistante.setEmail(client.getEmail());
-//        if(client.getPassword()!=null)
-//            clientExistante.setPassword(client.getPassword());
-//        if (client.getAdresse().getCodePostal() != 0)
-//            clientExistante.setAdresse(client.getAdresse().getCodePostal());
-//        if (client.getDateDeNaissance()!=null)
-//            clientExistante.setDateLimite(client.getDateLimite());
+
+    private static void remplacer(Client nouveauclient, Client clientExistante) {
+        if(nouveauclient.getEmail()!=null)
+            clientExistante.setEmail(nouveauclient.getEmail());
+        if(nouveauclient.getPassword()!=null)
+            clientExistante.setPassword(nouveauclient.getPassword());
+        if (nouveauclient.getAdresse().getCodePostal() !=null)
+            clientExistante.getAdresse().setCodePostal(nouveauclient.getAdresse().getCodePostal());
+        if (nouveauclient.getAdresse().getRue() !=null)
+            clientExistante.getAdresse().setRue(nouveauclient.getAdresse().getRue());
+        if (nouveauclient.getAdresse().getNumero()!=0)
+            clientExistante.getAdresse().setNumero(nouveauclient.getAdresse().getNumero());
+        if (nouveauclient.getDateDeNaissance()!=null)
+            clientExistante.setDateInscription(nouveauclient.getDateInscription());
+        if (nouveauclient.getListePermis() !=null)
+            clientExistante.setListePermis(nouveauclient.getListePermis());
+        if (nouveauclient.getNom() !=null)
+            clientExistante.setNom(nouveauclient.getNom());
+        if (nouveauclient.getPrenom() !=null)
+            clientExistante.setPrenom(nouveauclient.getPrenom());
     }
     /**
-     * Méthode supprimer(String email, String passwrod)
+     * Méthode supprimer(String email, String password)
      * @param email Requiert un string email pour trouver l'objet correspondant en base
      * @param password Requiert un string password pour trouver l'objet correspondant en base
      * @throws ClientException renvoie une clientException si les contraintes ne sont pas suivies
