@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
-    public static final String ID_NON_PRESENT = "id non present";
     private final ClientDAO clientDAO;
     private final ClientMapper clientMapper;
     private static final String REGEX_MDP = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#@&-_§]).{8,16}$";
