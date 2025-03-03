@@ -44,7 +44,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDTO trouver(String email) throws ClientException {
-        return null;
+        Optional<Client> optClient = clientDAO.findById(email);
+        if(optClient.isEmpty()) throw new ClientException("Id non trouvée");
+        Client client = optClient.get();
+        return clientMapper.toClientResponseDTO(client);
     }
 
     @Override

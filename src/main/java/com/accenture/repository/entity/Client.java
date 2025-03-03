@@ -2,7 +2,6 @@ package com.accenture.repository.entity;
 
 import com.accenture.shared.Permis;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +18,6 @@ public class Client extends UtilisateurConnecte{
     private Adresse adresse;
     private LocalDate dateDeNaissance;
     private LocalDate dateInscription;
-    private HashSet<Permis> listePermis;
+    private Permis listePermis;
     private Boolean desactive;
 }

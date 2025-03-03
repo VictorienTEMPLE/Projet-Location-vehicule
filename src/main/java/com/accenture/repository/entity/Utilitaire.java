@@ -1,7 +1,5 @@
 package com.accenture.repository.entity;
 
-
-import com.accenture.shared.Permis;
 import com.accenture.shared.Transmission;
 import com.accenture.shared.TypeCarburant;
 import com.accenture.shared.TypeVehicule;
@@ -14,26 +12,31 @@ import java.util.HashSet;
 @Entity
 @Data
 @NoArgsConstructor
-@DiscriminatorValue("Voiture")
-public class Voiture extends Vehicule{
+@DiscriminatorValue("Utilitaire")
+public class Utilitaire extends Vehicule {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String modele;
     private int nbPlaces;
     private int nbBagages;
-    private int nbPortes;
+    private double chargeMax;
+    private int ptac;
+    private int capacite;
     private Transmission transmission;
     private TypeCarburant carburant;
-    private TypeVehicule voiture;
+    private TypeVehicule typeVehicule;
 
-    public Voiture(String modele, int nbPlaces, int nbBagages, int nbPortes, Transmission transmission, TypeCarburant carburant, TypeVehicule voiture) {
+    public Utilitaire(String modele, int nbPlaces, int nbBagages, double chargeMax, int ptac, int capacite, Transmission transmission, TypeCarburant carburant, TypeVehicule typeVehicule) {
         this.modele = modele;
         this.nbPlaces = nbPlaces;
         this.nbBagages = nbBagages;
-        this.nbPortes = nbPortes;
+        this.chargeMax = chargeMax;
+        this.ptac = ptac;
+        this.capacite = capacite;
         this.transmission = transmission;
         this.carburant = carburant;
-        this.voiture = voiture;
+        this.typeVehicule = typeVehicule;
     }
 }
