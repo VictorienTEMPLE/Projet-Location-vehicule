@@ -12,7 +12,7 @@ public record ClientResponseDTO(
         String prenom,
         LocalDate dateDeNaissance,
         LocalDate dateInscription,
-        HashSet<Permis> listePermis,
+        Permis listePermis,
         Boolean desactive,
         String email
 ) {

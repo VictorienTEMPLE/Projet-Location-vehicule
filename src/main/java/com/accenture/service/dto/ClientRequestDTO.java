@@ -11,7 +11,7 @@ public record ClientRequestDTO(
          String prenom,
          LocalDate dateDeNaissance,
          LocalDate dateInscription, // a retirer
-         HashSet<Permis>listePermis,
+         Permis listePermis,
          Boolean desactive,     //a retirer
          String password,
          String email
