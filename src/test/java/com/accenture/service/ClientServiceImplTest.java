@@ -31,11 +31,10 @@ class ClientServiceImplTest {
     ClientMapper mapperMock;
     @InjectMocks //on créer le new tachServiceImpl ici
     ClientServiceImpl service;
-    HashSet<Permis> permis = new HashSet<Permis>();
+     Permis permis= Permis.B;
 
     private  ClientRequestDTO clientRequestDTOUn(){
-        HashSet<Permis> permis = new HashSet<>();
-        permis.add(Permis.B);
+
         ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(0, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
     return dto;
     }
@@ -126,7 +125,7 @@ class ClientServiceImplTest {
 
     @Test
     void testAjouterOk() {
-        ClientRequestDTO requestDto = new ClientRequestDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Jack", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), new HashSet<Permis>(), false, "P@ssword3", "emailfun@email.com");
+        ClientRequestDTO requestDto = new ClientRequestDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Jack", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), permis, false, "P@ssword3", "emailfun@email.com");
         Client tacheAvantEnreg = clientProfilPourTests();
 
         Client tacheApresEnreg = clientProfilPourTests();
@@ -147,8 +146,7 @@ class ClientServiceImplTest {
         c.setPrenom("Joe");
         c.setDateDeNaissance(LocalDate.of(2004, 8, 12));
         c.setDateInscription(LocalDate.of(2025, 8, 12));
-        c.setListePermis(new HashSet<Permis>());
-        c.getListePermis().add(Permis.B);
+        c.setListePermis(Permis.B);
         c.setDesactive(false);
         c.setPassword("P@ssword2");
         c.setEmail("ceciestuneemail@email.com");
@@ -158,14 +156,14 @@ class ClientServiceImplTest {
     private static ClientResponseDTO creerClientResponseDTOExample() {
         HashSet<Permis> permis1 = new HashSet<>();
         permis1.add(Permis.B);
-        return new ClientResponseDTO(new AdresseDTO(3, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Jack", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), permis1, false, "ceciestuneemail@email.com");
+        return new ClientResponseDTO(new AdresseDTO(3, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Jack", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "ceciestuneemail@email.com");
     }
 
 
     private static ClientResponseDTO creerClientResponseDTOExample2() {
         HashSet<Permis> permis2 = new HashSet<>();
         permis2.add(Permis.B);
-        return new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Joe", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), permis2, false, "emailfun@email.com");
+        return new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Joe", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "emailfun@email.com");
     }
 
     @Test
@@ -177,8 +175,7 @@ class ClientServiceImplTest {
         client2.setPrenom("Joe");
         client2.setDateDeNaissance(LocalDate.of(2004, 8, 12));
         client2.setDateInscription(LocalDate.of(2025, 8, 12));
-        client2.setListePermis(new HashSet<Permis>());
-        client2.getListePermis().add(Permis.B);
+        client2.setListePermis(Permis.B);
         client2.setDesactive(false);
         client2.setPassword("P@ssword2");
         client2.setEmail("ceciestuneemail@email.com");
@@ -221,9 +218,7 @@ class ClientServiceImplTest {
     }
 
     private static ClientResponseDTO clientResponseProfilPourTests2() {
-        HashSet<Permis> permis3 = new HashSet<>();
-        permis3.add(Permis.B);
-        ClientResponseDTO a = new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Joestar", "Johnathan", LocalDate.of(2000, 11, 24), LocalDate.now(), permis3, false, "sympa@email.com");
+        ClientResponseDTO a = new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Joestar", "Johnathan", LocalDate.of(2000, 11, 24), LocalDate.now(), Permis.B, false, "sympa@email.com");
         return a;
     }
 
@@ -253,8 +248,7 @@ class ClientServiceImplTest {
         c.setPrenom("Joel");
         c.setDateDeNaissance(LocalDate.of(2002, 8, 12));
         c.setDateInscription(LocalDate.of(2025, 8, 12));
-        c.setListePermis(new HashSet<Permis>());
-        c.getListePermis().add(Permis.B);
+        c.setListePermis(Permis.B);
         c.setDesactive(false);
         c.setPassword("P@ssword3");
         c.setEmail("ceciestuneemail@email.com");
