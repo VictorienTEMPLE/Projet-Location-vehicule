@@ -33,12 +33,59 @@ class ClientServiceImplTest {
     ClientServiceImpl service;
      Permis permis= Permis.B;
 
+    /* *********************************************** *
+     *                                                 *
+     *                 methodes privées                *
+     *                                                 *
+     * *********************************************** *
+     */
+
+
     private  ClientRequestDTO clientRequestDTOUn(){
 
         ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(0, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
     return dto;
     }
 
+    private static Client clientProfilPourTests() {
+        Client c = new Client();
+        c.setAdresse(new Adresse(1, 3, "Rue JoeLeptit", "44800", "Saint-Herblain"));
+        c.setNom("Legrand");
+        c.setPrenom("Joe");
+        c.setDateDeNaissance(LocalDate.of(2004, 8, 12));
+        c.setDateInscription(LocalDate.of(2025, 8, 12));
+        c.setListePermis(Permis.B);
+        c.setDesactive(false);
+        c.setPassword("P@ssword2");
+        c.setEmail("ceciestuneemail@email.com");
+        return c;
+    }
+
+    private static ClientResponseDTO creerClientResponseDTOExample() {
+        HashSet<Permis> permis1 = new HashSet<>();
+        permis1.add(Permis.B);
+        return new ClientResponseDTO(new AdresseDTO(3, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Jack", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "ceciestuneemail@email.com");
+    }
+
+
+    private static ClientResponseDTO creerClientResponseDTOExample2() {
+        HashSet<Permis> permis2 = new HashSet<>();
+        permis2.add(Permis.B);
+        return new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Joe", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "emailfun@email.com");
+    }
+
+    private static ClientResponseDTO clientResponseProfilPourTests2() {
+        ClientResponseDTO a = new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Joestar", "Johnathan", LocalDate.of(2000, 11, 24), LocalDate.now(), Permis.B, false, "sympa@email.com");
+        return a;
+    }
+
+
+    /* *********************************************** *
+     *                                                 *
+     *                methodes de tests                *
+     *                                                 *
+     * *********************************************** *
+     */
 
     @Test
     void testAjouterNull() {
@@ -139,32 +186,7 @@ class ClientServiceImplTest {
         Mockito.verify(daoMock, Mockito.times(1)).save(tacheAvantEnreg);
     }
 
-    private static Client clientProfilPourTests() {
-        Client c = new Client();
-        c.setAdresse(new Adresse(1, 3, "Rue JoeLeptit", "44800", "Saint-Herblain"));
-        c.setNom("Legrand");
-        c.setPrenom("Joe");
-        c.setDateDeNaissance(LocalDate.of(2004, 8, 12));
-        c.setDateInscription(LocalDate.of(2025, 8, 12));
-        c.setListePermis(Permis.B);
-        c.setDesactive(false);
-        c.setPassword("P@ssword2");
-        c.setEmail("ceciestuneemail@email.com");
-        return c;
-    }
 
-    private static ClientResponseDTO creerClientResponseDTOExample() {
-        HashSet<Permis> permis1 = new HashSet<>();
-        permis1.add(Permis.B);
-        return new ClientResponseDTO(new AdresseDTO(3, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Jack", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "ceciestuneemail@email.com");
-    }
-
-
-    private static ClientResponseDTO creerClientResponseDTOExample2() {
-        HashSet<Permis> permis2 = new HashSet<>();
-        permis2.add(Permis.B);
-        return new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Joe", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "emailfun@email.com");
-    }
 
     @Test
     void listeclient() {
@@ -189,7 +211,7 @@ class ClientServiceImplTest {
         Mockito.when(mapperMock.toClientResponseDTO(client1)).thenReturn(creerClientResponseDTOExample());
         Mockito.when(mapperMock.toClientResponseDTO(client2)).thenReturn(creerClientResponseDTOExample2());
 
-        assertEquals(dtolist, service.liste());
+        assertEquals(dtolist, service.lister());
     }
 
     @Test
@@ -217,10 +239,7 @@ class ClientServiceImplTest {
         Mockito.verify(daoMock, Mockito.times(1)).findByEmailAndPassword("sympa@email.com", "P@ssword1");
     }
 
-    private static ClientResponseDTO clientResponseProfilPourTests2() {
-        ClientResponseDTO a = new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Joestar", "Johnathan", LocalDate.of(2000, 11, 24), LocalDate.now(), Permis.B, false, "sympa@email.com");
-        return a;
-    }
+
 
     @Test
     void testSupprimerSansEmail(){
@@ -281,15 +300,6 @@ class ClientServiceImplTest {
         Mockito.when(daoMock.findByEmailAndPassword(client.getEmail(),client.getPassword())).thenReturn(Optional.of(client));
         service.modifier(client.getEmail(),client.getPassword(),clientRequestDTOUn());
     }
-//    public ClientResponseDTO modifier(String email, String password, ClientRequestDTO clientRequestDTO) throws ClientException {
-//        Optional<Client> optClient = clientDAO.findByEmailAndPassword(email,password);
-//        if(optClient.isEmpty()) throw new ClientException("Le compte que vous chercher n'existe pas");
-//        Client client = clientMapper.toClient(clientRequestDTO);
-//        Client clientExistant = optClient.get();
-//        remplacer(client, clientExistant);
-//        Client clientEnreg = clientDAO.save(clientExistant);
-//        return clientMapper.toClientResponseDTO(clientEnreg);
-//    }
 
 }
 

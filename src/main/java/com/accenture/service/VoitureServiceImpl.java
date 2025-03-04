@@ -8,6 +8,7 @@ import com.accenture.repository.entity.Voiture;
 import com.accenture.service.dto.VoitureRequestDTO;
 import com.accenture.service.dto.VoitureResponseDTO;
 import com.accenture.service.mapper.VoitureMapper;
+import com.accenture.shared.FiltreRechercheVehicule;
 import com.accenture.shared.Permis;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class VoitureServiceImpl implements VoitureService {
     }
 
     @Override
-    public List<VoitureResponseDTO> liste() {
+    public List<VoitureResponseDTO> lister() {
         List<Voiture> listeC = voitureDAO.findAll();
         return listeC.stream()
                 .map(voitureMapper::toVoitureResponseDTO)
@@ -44,11 +45,13 @@ public class VoitureServiceImpl implements VoitureService {
     }
 
     @Override
-    public VoitureResponseDTO trouver(int id) throws VehiculeException {
-        Optional<Voiture> optVoiture = voitureDAO.findById(id);
-        if(optVoiture.isEmpty()) throw new VehiculeException("Id non trouvée");
-        Voiture voiture = optVoiture.get();
-        return voitureMapper.toVoitureResponseDTO(voiture);
+    public List<VoitureResponseDTO> trouver(FiltreRechercheVehicule filtreRechercheVehicule) throws VehiculeException {
+        List<Voiture> listeVoiture = switch (filtreRechercheVehicule){
+            case ACTIF -> voitureDAO.findByActif(true);
+            case RETIREDUPARC -> voitureDAO.findByRetireDuParc(true);
+            default -> throw new VehiculeException("Option invalide");
+        };
+        return listeVoiture.stream().map(voitureMapper::toVoitureResponseDTO).toList();
     }
 
     @Override

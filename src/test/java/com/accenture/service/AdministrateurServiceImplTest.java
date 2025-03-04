@@ -27,11 +27,48 @@ class AdministrateurServiceImplTest {
     @InjectMocks //on créer le new tachServiceImpl ici
     AdministrateurServiceImpl service;
 
+    /* *********************************************** *
+     *                                                 *
+     *                 methodes privées                *
+     *                                                 *
+     * *********************************************** *
+     */
+
     private AdministrateurRequestDTO adminRequestDTOUn(){
         AdministrateurRequestDTO dto = new AdministrateurRequestDTO( "Legrand", "Joe",  "P@ssword1", "blablabla@mail.com","Administrateur");
         return dto;
     }
 
+    private static Administrateur adminProfilPourTests() {
+        Administrateur a = new Administrateur();
+        a.setNom("Legrand");
+        a.setPrenom("Joe");
+        a.setPassword("P@ssword2");
+        a.setEmail("ceciestuneemail@email.com");
+        a.setFonction("Administrateur1");
+        return a;
+    }
+
+    private static AdministrateurResponseDTO creerAdminResponseDTOExample(){
+        return new AdministrateurResponseDTO("Legrand","Joe","ceciestuneemail@email.com","Administrateur1");
+    }
+
+    private static AdministrateurResponseDTO creerAdminResponseDTOExample2(){
+        return new AdministrateurResponseDTO("Joestar","Johnathan","blablabla@mail.com","Administrateur2");
+    }
+
+    private static AdministrateurResponseDTO adminResponseProfilPourTests2() {
+        AdministrateurResponseDTO a = new AdministrateurResponseDTO("Joestar","Johnathan","sympa@email.com","Administrateur");
+        return a;
+    }
+
+
+    /* *********************************************** *
+     *                                                 *
+     *                methodes de tests                *
+     *                                                 *
+     * *********************************************** *
+     */
 
     @Test
     void testAjouterNull() {
@@ -86,21 +123,7 @@ class AdministrateurServiceImplTest {
         Mockito.verify(daoMock,Mockito.times(1)).save(tacheAvantEnreg);
     }
 
-    private static Administrateur adminProfilPourTests() {
-        Administrateur a = new Administrateur();
-        a.setNom("Legrand");
-        a.setPrenom("Joe");
-        a.setPassword("P@ssword2");
-        a.setEmail("ceciestuneemail@email.com");
-        a.setFonction("Administrateur1");
-        return a;
-    }
-    private static AdministrateurResponseDTO creerAdminResponseDTOExample(){
-        return new AdministrateurResponseDTO("Legrand","Joe","ceciestuneemail@email.com","Administrateur1");
-    }
-    private static AdministrateurResponseDTO creerAdminResponseDTOExample2(){
-        return new AdministrateurResponseDTO("Joestar","Johnathan","blablabla@mail.com","Administrateur2");
-    }
+
 
     @Test
     void testlisteAdmin() {
@@ -121,7 +144,7 @@ class AdministrateurServiceImplTest {
         Mockito.when(mapperMock.toAdministrateurResponseDTO(admin1)).thenReturn(creerAdminResponseDTOExample());
         Mockito.when(mapperMock.toAdministrateurResponseDTO(admin2)).thenReturn(creerAdminResponseDTOExample2());
 
-        assertEquals(dtolist,service.listeAdmin());
+        assertEquals(dtolist,service.listerAdmin());
     }
 
     @Test
@@ -146,10 +169,7 @@ class AdministrateurServiceImplTest {
         Mockito.verify(daoMock, Mockito.times(1)).findByEmailAndPassword("sympa@email.com","P@ssword1");
     }
 
-    private static AdministrateurResponseDTO adminResponseProfilPourTests2() {
-        AdministrateurResponseDTO a = new AdministrateurResponseDTO("Joestar","Johnathan","sympa@email.com","Administrateur");
-        return a;
-    }
+
 
     @Test
     void testSupprimerSansEmail(){

@@ -35,9 +35,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientResponseDTO ajouter(ClientRequestDTO clientRequestDTO) throws ClientException {
         verifierClient(clientRequestDTO);
         Client client = clientMapper.toClient(clientRequestDTO);
-//        client.setDateDInscription(LocalDate.now());
         client.setDesactive(false);
-        System.out.println(client);
         Client clientRetour = clientDAO.save(client);
         return clientMapper.toClientResponseDTO(clientRetour);
     }
@@ -96,10 +94,10 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * méthode Liste()
-     * @return retourne la liste complète de tous les objet Client en base
+     * @return retourne la lister complète de tous les objet Client en base
      */
     @Override
-    public List<ClientResponseDTO> liste() {
+    public List<ClientResponseDTO> lister() {
         List<Client> listeC = clientDAO.findAll();
         return listeC.stream()
                 .map(clientMapper::toClientResponseDTO)

@@ -9,11 +9,18 @@ import java.util.HashSet;
 
 public record VoitureResponseDTO(
         String modele,
+        String marque,
+        String couleur,
         int nbPlaces,
+        int nbPortes,
         int nbBagages,
+        int kilometrage,
+        double tarifJournalierDeBase,
         Transmission transmission,
         TypeCarburant carburant,
         TypeVehicule typeVehicule,
-        Permis permis
+        Boolean climatisation,
+        Boolean retireDuParc,
+        Boolean actif
 ) {
 }

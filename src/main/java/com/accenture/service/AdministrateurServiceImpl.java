@@ -34,7 +34,6 @@ public class AdministrateurServiceImpl implements AdministrateurService {
     public AdministrateurResponseDTO ajouter(AdministrateurRequestDTO administrateurRequestDTO) throws AdministrateurException {
         verifierAdmin(administrateurRequestDTO);
         Administrateur administrateur = administrateurMapper.toAdministrateur(administrateurRequestDTO);
-        System.out.println(administrateur);
         Administrateur administrateurRetour = administrateurDAO.save(administrateur);
         return administrateurMapper.toAdministrateurResponseDTO(administrateurRetour);
     }
@@ -42,10 +41,10 @@ public class AdministrateurServiceImpl implements AdministrateurService {
     /**
      * Méthode listeAdmin()
      *
-     * @return La méthode nous retourne la liste de tous les administrateurs en base par l'intermédiaire d'un stream.
+     * @return La méthode nous retourne la lister de tous les administrateurs en base par l'intermédiaire d'un stream.
      */
     @Override
-    public List<AdministrateurResponseDTO> listeAdmin() {
+    public List<AdministrateurResponseDTO> listerAdmin() {
         List<Administrateur> listeA = administrateurDAO.findAll();
         return listeA.stream()
                 .map(administrateurMapper::toAdministrateurResponseDTO)
@@ -105,7 +104,7 @@ public class AdministrateurServiceImpl implements AdministrateurService {
      * @param administrateurRequestDTO Nous permet d'aller chercher les paramètres d'admin. pour la vérification
      * @throws AdministrateurException lorsqu'un paramètre de AdministrateurrequestDTO est null iy blank, il renvoie l'exception correspondante au paramètre.
      */
-    private static void verifierAdmin(AdministrateurRequestDTO administrateurRequestDTO) throws AdministrateurException {
+    private  void verifierAdmin(AdministrateurRequestDTO administrateurRequestDTO) throws AdministrateurException {
         if (administrateurRequestDTO == null)
             throw new AdministrateurException("L'administrateur ne peux pas être null");
         if (administrateurRequestDTO.nom() == null || administrateurRequestDTO.nom().isBlank())
@@ -120,5 +119,7 @@ public class AdministrateurServiceImpl implements AdministrateurService {
             throw new AdministrateurException("Le mot de passe doit contenir au moins 8 charactère et maximum 16, il doit également avoir une majuscule, une minuscule, un chiffre et un des carractères spéciaux & # @ - _ § au moins.");
         if (administrateurRequestDTO.fonction() == null || administrateurRequestDTO.fonction().isBlank())
             throw new AdministrateurException("La fonction dois être définie");
+        if(administrateurDAO.count() ==1)
+            throw new AdministrateurException("Il faut au moins un admin !");
     }
 }

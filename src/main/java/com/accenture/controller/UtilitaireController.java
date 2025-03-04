@@ -3,6 +3,8 @@ package com.accenture.controller;
 import com.accenture.service.UtilitaireService;
 import com.accenture.service.dto.UtilitaireRequestDTO;
 import com.accenture.service.dto.UtilitaireResponseDTO;
+import com.accenture.service.dto.UtilitaireResponseDTO;
+import com.accenture.shared.FiltreRechercheVehicule;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ public class UtilitaireController {
 
     @GetMapping
     List<UtilitaireResponseDTO> voitures() {
-        return utilitaireService.liste();
+        return utilitaireService.lister();
     }
 
     @PostMapping
@@ -29,9 +31,9 @@ public class UtilitaireController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<UtilitaireResponseDTO> unUtiliraire(@PathVariable("id") int id){
-        UtilitaireResponseDTO trouve = utilitaireService.trouver(id);
+    @GetMapping("/{filtreRecherche}")
+    ResponseEntity<List<UtilitaireResponseDTO>> trouverParFiltre(FiltreRechercheVehicule filtreRechercheVehicule){
+        List<UtilitaireResponseDTO> trouve = utilitaireService.trouver(filtreRechercheVehicule);
         return ResponseEntity.ok(trouve);
     }
 

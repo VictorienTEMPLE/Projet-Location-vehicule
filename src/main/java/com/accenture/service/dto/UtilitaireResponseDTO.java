@@ -9,6 +9,7 @@ import java.util.HashSet;
 
 public record UtilitaireResponseDTO(
         String modele,
+        String marque,
         String couleur,
         int nbPlaces,
         int nbBagages,

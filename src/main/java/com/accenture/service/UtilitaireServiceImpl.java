@@ -2,14 +2,16 @@ package com.accenture.service;
 
 import com.accenture.exception.VehiculeException;
 import com.accenture.repository.UtilitaireDAO;
-import com.accenture.repository.entity.Utilitaire;
+import com.accenture.repository.entity.*;
 import com.accenture.repository.entity.Utilitaire;
 import com.accenture.repository.entity.Utilitaire;
 import com.accenture.repository.entity.Utilitaire;
 import com.accenture.service.dto.UtilitaireRequestDTO;
 import com.accenture.service.dto.UtilitaireResponseDTO;
 import com.accenture.service.dto.UtilitaireRequestDTO;
+import com.accenture.service.dto.UtilitaireResponseDTO;
 import com.accenture.service.mapper.UtilitaireMapper;
+import com.accenture.shared.FiltreRechercheVehicule;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public class UtilitaireServiceImpl implements UtilitaireService{
     }
 
     @Override
-    public List<UtilitaireResponseDTO> liste() {
+    public List<UtilitaireResponseDTO> lister() {
         List<Utilitaire> listeC = utilitaireDAO.findAll();
         return listeC.stream()
                 .map(utilitaireMapper::toUtilitaireResponseDTO)
@@ -43,11 +45,12 @@ public class UtilitaireServiceImpl implements UtilitaireService{
     }
 
     @Override
-    public UtilitaireResponseDTO trouver(int id) throws VehiculeException {
-        Optional<Utilitaire> optUtilitaire = utilitaireDAO.findById(id);
-        if(optUtilitaire.isEmpty()) throw new VehiculeException("Id non trouvée");
-        Utilitaire client = optUtilitaire.get();
-        return utilitaireMapper.toUtilitaireResponseDTO(client);
+    public List<UtilitaireResponseDTO> trouver(FiltreRechercheVehicule filtreRechercheVehicule) throws VehiculeException {
+        List<Utilitaire> listeUtilitaire = switch (filtreRechercheVehicule){
+            case ACTIF -> utilitaireDAO.findByActif(true);
+            case RETIREDUPARC -> utilitaireDAO.findByRetireDuParc(true);
+        };
+        return listeUtilitaire.stream().map(utilitaireMapper::toUtilitaireResponseDTO).toList();
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.util.HashSet;
 public record UtilitaireRequestDTO (
      int id,
      String modele,
+     String marque,
      String couleur,
      int nbPlaces,
      int nbBagages,

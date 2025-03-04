@@ -22,7 +22,7 @@ public class AdministrateurController {
 
     @GetMapping
     List<AdministrateurResponseDTO> clients() {
-        return administrateurService.listeAdmin();
+        return administrateurService.listerAdmin();
     }
 
     @PostMapping
@@ -35,7 +35,7 @@ public class AdministrateurController {
     public AdministrateurResponseDTO info(String email, String password){
         return administrateurService.trouverAdminParEmailEtPassword(email,password);
     }
-    @PutMapping("/modifier")
+    @PutMapping
     ResponseEntity<AdministrateurResponseDTO> modifier(String email, String password,@RequestBody AdministrateurRequestDTO administrateurRequestDTO){
         administrateurService.modifier(email, password, administrateurRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

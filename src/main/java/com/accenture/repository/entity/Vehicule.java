@@ -26,6 +26,8 @@ public class Vehicule {
     private Boolean actif;
     private Boolean retireDuParc;
     private double TarifJournalierDeBase;
+    @Enumerated(EnumType.STRING)
     private Permis permis;
-    private LocalDateTime crenauxReservation;
+    private LocalDateTime crenauxReservationDebut;
+    private LocalDateTime crenauxReservationFin;
 }

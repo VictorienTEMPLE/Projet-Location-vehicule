@@ -3,8 +3,8 @@ package com.accenture.controller;
 import com.accenture.service.VoitureService;
 import com.accenture.service.dto.VoitureRequestDTO;
 import com.accenture.service.dto.ClientResponseDTO;
-import com.accenture.service.dto.VoitureRequestDTO;
 import com.accenture.service.dto.VoitureResponseDTO;
+import com.accenture.shared.FiltreRechercheVehicule;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class VoitureController {
 
     @GetMapping
     List<VoitureResponseDTO> voitures() {
-        return voitureService.liste();
+        return voitureService.lister();
     }
 
     @PostMapping
@@ -31,19 +31,19 @@ public class VoitureController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{id}")
-    ResponseEntity<VoitureResponseDTO> uneVoiture(@PathVariable("id") int id){
-        VoitureResponseDTO trouve = voitureService.trouver(id);
+    @GetMapping("/{filtreRecherche}")
+    ResponseEntity<List<VoitureResponseDTO>> trouverParFiltre(FiltreRechercheVehicule filtreRechercheVehicule){
+        List<VoitureResponseDTO> trouve = voitureService.trouver(filtreRechercheVehicule);
         return ResponseEntity.ok(trouve);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     ResponseEntity<Void> delete( int id){
         voitureService.supprimer(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/modifier")
+    @PutMapping
     ResponseEntity<ClientResponseDTO> modifier(int id,@RequestBody VoitureRequestDTO voitureRequestDTO){
         voitureService.modifier(id, voitureRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
