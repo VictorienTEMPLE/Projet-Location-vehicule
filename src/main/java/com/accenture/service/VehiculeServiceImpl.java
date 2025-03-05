@@ -20,17 +20,17 @@ public class VehiculeServiceImpl implements VehiculeService {
         this.vehiculeMapper = vehiculeMapper;
     }
 
-    @Override
-    public List<Vehicule> trouver(FiltreRechercheVehicule filtreRechercheVehicule) throws VehiculeException {
-        List<Vehicule> listeVehicule = switch (filtreRechercheVehicule){
-            case LOCATION_DEBUT -> vehiculeDAO.findByCrenauxReservationDebut(LocalDateTime.now());
-            case LOCATION_FIN -> vehiculeDAO.findByCrenauxReservationFin(LocalDateTime.now());
-            default -> throw new VehiculeException("Option invalide");
-        };
-       return listeVehicule.stream().map(vehiculeMapper::toDTO).toList();
+//    @Override
+//    public List<Vehicule> trouver(FiltreRechercheVehicule filtreRechercheVehicule) throws VehiculeException {
+//        return switch (filtreRechercheVehicule){
+//            case LOCATION_DEBUT -> vehiculeDAO.findByCrenauxReservationDebut(LocalDateTime.now());
+//            case LOCATION_FIN -> vehiculeDAO.findByCrenauxReservationFin(LocalDateTime.now());
+//            default -> throw new VehiculeException("Option invalide");
+//        };
+
         //creer deux liste de utilitaire et voiture, boucler sur la liste
         //pour remplir soit voiture ou utilitaire
         //faire un mapper sur chaque pour recuperer liste respective
         //mettre ses liste dans un vehiculeDTO
     }
-}
+

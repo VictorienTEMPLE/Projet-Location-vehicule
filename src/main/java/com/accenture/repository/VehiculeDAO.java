@@ -8,6 +8,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface VehiculeDAO extends JpaRepository<Vehicule, Integer> {
-    List<Vehicule> findByCrenauxReservationDebut(LocalDateTime dateheuredebut);
-    List<Vehicule> findByCrenauxReservationFin(LocalDateTime dateheurefin);
+
 }

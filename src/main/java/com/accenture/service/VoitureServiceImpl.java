@@ -30,9 +30,7 @@ public class VoitureServiceImpl implements VoitureService {
     public VoitureResponseDTO ajouter(VoitureRequestDTO voitureRequestDTO){
         Voiture voiture = voitureMapper.toVoiture(voitureRequestDTO);
         verifierVoiture(voiture);
-        System.out.println(voiture);
         Voiture voitureRetour = voitureDAO.save(voiture);
-        System.out.println(voitureRetour);
         return voitureMapper.toVoitureResponseDTO(voitureRetour);
     }
 

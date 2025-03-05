@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface ClientDAO extends JpaRepository<Client, String> {
     boolean existsByEmail(String email);
     Optional<Client> findByEmailAndPassword(String email, String password);
+    Optional<Client> findByEmail(String email);
 }

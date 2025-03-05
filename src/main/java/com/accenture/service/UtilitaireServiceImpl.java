@@ -2,12 +2,7 @@ package com.accenture.service;
 
 import com.accenture.exception.VehiculeException;
 import com.accenture.repository.UtilitaireDAO;
-import com.accenture.repository.entity.*;
 import com.accenture.repository.entity.Utilitaire;
-import com.accenture.repository.entity.Utilitaire;
-import com.accenture.repository.entity.Utilitaire;
-import com.accenture.service.dto.UtilitaireRequestDTO;
-import com.accenture.service.dto.UtilitaireResponseDTO;
 import com.accenture.service.dto.UtilitaireRequestDTO;
 import com.accenture.service.dto.UtilitaireResponseDTO;
 import com.accenture.service.mapper.UtilitaireMapper;
@@ -15,7 +10,7 @@ import com.accenture.shared.FiltreRechercheVehicule;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 @Service
 public class UtilitaireServiceImpl implements UtilitaireService{
     private final UtilitaireDAO utilitaireDAO;
@@ -49,6 +44,7 @@ public class UtilitaireServiceImpl implements UtilitaireService{
         List<Utilitaire> listeUtilitaire = switch (filtreRechercheVehicule){
             case ACTIF -> utilitaireDAO.findByActif(true);
             case RETIREDUPARC -> utilitaireDAO.findByRetireDuParc(true);
+            default -> throw new VehiculeException("Choix incorrect");
         };
         return listeUtilitaire.stream().map(utilitaireMapper::toUtilitaireResponseDTO).toList();
     }

@@ -28,6 +28,4 @@ public class Vehicule {
     private double TarifJournalierDeBase;
     @Enumerated(EnumType.STRING)
     private Permis permis;
-    private LocalDateTime crenauxReservationDebut;
-    private LocalDateTime crenauxReservationFin;
 }

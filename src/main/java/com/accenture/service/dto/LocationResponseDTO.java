@@ -9,15 +9,13 @@ import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDate;
 
-public record LocationDTO (
-     Client client,
-     Vehicule vehicule,
-    // Accessoires accessoires;
-     LocalDate dateDeDebut,
-     LocalDate dateDeFin,
-     int NbkilometreParcourus,
-     int MontantTotalCalcule,
-     EtatLocation etatLocation
-){
-
+public record LocationResponseDTO(
+         Client client,
+         Vehicule vehicule,
+         //Accessoires accessoires,
+         LocalDate dateDeDebut,
+         LocalDate dateDeFin,
+         int nbkilometreParcourus,
+         EtatLocation etatLocation
+) {
 }

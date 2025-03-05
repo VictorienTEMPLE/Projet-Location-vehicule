@@ -8,6 +8,6 @@ import com.accenture.shared.FiltreRechercheVehicule;
 import java.util.List;
 
 public interface VehiculeService {
-    public List<Vehicule> trouver(FiltreRechercheVehicule filtreRechercheVehicule) throws VehiculeException ;
+//public List<Vehicule> trouver(FiltreRechercheVehicule filtreRechercheVehicule) throws VehiculeException ;
 
     }
