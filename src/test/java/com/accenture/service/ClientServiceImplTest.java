@@ -33,51 +33,6 @@ class ClientServiceImplTest {
     ClientServiceImpl service;
      Permis permis= Permis.B;
 
-    /* *********************************************** *
-     *                                                 *
-     *                 methodes privées                *
-     *                                                 *
-     * *********************************************** *
-     */
-
-
-    private  ClientRequestDTO clientRequestDTOUn(){
-
-        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(0, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
-    return dto;
-    }
-
-    private static Client clientProfilPourTests() {
-        Client c = new Client();
-        c.setAdresse(new Adresse(1, 3, "Rue JoeLeptit", "44800", "Saint-Herblain"));
-        c.setNom("Legrand");
-        c.setPrenom("Joe");
-        c.setDateDeNaissance(LocalDate.of(2004, 8, 12));
-        c.setDateInscription(LocalDate.of(2025, 8, 12));
-        c.setListePermis(Permis.B);
-        c.setDesactive(false);
-        c.setPassword("P@ssword2");
-        c.setEmail("ceciestuneemail@email.com");
-        return c;
-    }
-
-    private static ClientResponseDTO creerClientResponseDTOExample() {
-        HashSet<Permis> permis1 = new HashSet<>();
-        permis1.add(Permis.B);
-        return new ClientResponseDTO(new AdresseDTO(3, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Jack", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "ceciestuneemail@email.com");
-    }
-
-
-    private static ClientResponseDTO creerClientResponseDTOExample2() {
-        HashSet<Permis> permis2 = new HashSet<>();
-        permis2.add(Permis.B);
-        return new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Joe", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "emailfun@email.com");
-    }
-
-    private static ClientResponseDTO clientResponseProfilPourTests2() {
-        ClientResponseDTO a = new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Joestar", "Johnathan", LocalDate.of(2000, 11, 24), LocalDate.now(), Permis.B, false, "sympa@email.com");
-        return a;
-    }
 
 
     /* *********************************************** *
@@ -111,8 +66,20 @@ class ClientServiceImplTest {
     }
 
     @Test
+    void testAjouterAdresseRueBlank(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(1, "", "44000", "Nantes"),"Joe", "Legrand", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
+        assertThrows(ClientException.class, () -> service.ajouter(dto));
+    }
+
+    @Test
     void testAjouterSansCodePostalAdresse() {
         ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(1, "Rue joe legrand", null, "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
+        assertThrows(ClientException.class, () -> service.ajouter(dto));
+    }
+
+    @Test
+    void testAjouterCodePostalAdresseBlank() {
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(1, "Rue joe legrand", "", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
         assertThrows(ClientException.class, () -> service.ajouter(dto));
     }
 
@@ -123,14 +90,32 @@ class ClientServiceImplTest {
     }
 
     @Test
+    void testAjouterVilleAdresseBlank() {
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(1, "Rue joe legrand", "44000", ""), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
+        assertThrows(ClientException.class, () -> service.ajouter(dto));
+    }
+
+    @Test
     void testAjouterSansNom() {
         ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), null, "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
         assertThrows(ClientException.class, () -> service.ajouter(dto));
     }
 
     @Test
+    void testAjouterNomBlank() {
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
+        assertThrows(ClientException.class, () -> service.ajouter(dto));
+    }
+
+    @Test
     void testAjouterSansPrenom() {
         ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", null, LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
+        assertThrows(ClientException.class, () -> service.ajouter(dto));
+    }
+
+    @Test
+    void testAjouterPrenomBlank() {
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
         assertThrows(ClientException.class, () -> service.ajouter(dto));
     }
 
@@ -159,6 +144,12 @@ class ClientServiceImplTest {
     }
 
     @Test
+    void testAjouterPasswordBlank() {
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "", "blablabla@mail.com");
+        assertThrows(ClientException.class, () -> service.ajouter(dto));
+    }
+
+    @Test
     void testAjouterPasswordMauvais() {
         ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "pswordmauvais", "blablabla@mail.com");
         assertThrows(ClientException.class, () -> service.ajouter(dto));
@@ -167,6 +158,12 @@ class ClientServiceImplTest {
     @Test
     void testAjouterSansEmail() {
         ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", null);
+        assertThrows(ClientException.class, () -> service.ajouter(dto));
+    }
+
+    @Test
+    void testAjouterEmailBlank() {
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "");
         assertThrows(ClientException.class, () -> service.ajouter(dto));
     }
 
@@ -189,7 +186,7 @@ class ClientServiceImplTest {
 
 
     @Test
-    void listeclient() {
+    void testlisteclient() {
         Client client1 = clientProfilPourTests();
         Client client2 = new Client();
         client2.setAdresse(new Adresse(1, 12, "Rue JoeLeptit", "44800", "Saint-Herblain"));
@@ -216,27 +213,46 @@ class ClientServiceImplTest {
 
     @Test
     void testTrouverClientParEmailEtPasswordSansEmail() {
-        assertThrows(ClientException.class, () -> service.trouverClientParEmailEtPassword(null, "P@ssword1"));
+        assertThrows(ClientException.class, () -> service.trouverClientParEmailEtPassword(null,"P@ssword1"));
+    }
+
+    @Test
+    void testTrouverClientParEmailEtPasswordEmailBlank() {
+        assertThrows(ClientException.class, () -> service.trouverClientParEmailEtPassword("","P@ssword1"));
     }
 
     @Test
     void testTrouverClientParEmailEtPasswordSansPassword() {
-        assertThrows(ClientException.class, () -> service.trouverClientParEmailEtPassword("emailsympa@email.com", null));
+        assertThrows(ClientException.class, () -> service.trouverClientParEmailEtPassword("sympa@email.com",null));
     }
-
     @Test
-    void testTrouverClientParEmailEtPasswordMauvaisPassword() {
-        assertThrows(ClientException.class, () -> service.trouverClientParEmailEtPassword("emailsympa@email.com", "P@ss"));
+    void testTrouverClientParEmailEtPasswordPasswordBlank() {
+        assertThrows(ClientException.class, () -> service.trouverClientParEmailEtPassword("sympa@email.com",""));
     }
-
     @Test
     void testTrouverClientParEmailEtPasswordOk() {
         Client client1 = clientProfilPourTests();
         ClientResponseDTO clientResponseDTO = clientResponseProfilPourTests2();
-        Mockito.when(daoMock.findByEmailAndPassword("sympa@email.com", "P@ssword1")).thenReturn(Optional.of(client1));
+        Mockito.when(daoMock.findByEmailAndPassword("sympa@email.com","P@ssword1")).thenReturn(Optional.of(client1));
         Mockito.when(mapperMock.toClientResponseDTO(client1)).thenReturn(clientResponseDTO);
-        assertEquals(clientResponseDTO, service.trouverClientParEmailEtPassword("sympa@email.com", "P@ssword1"));
-        Mockito.verify(daoMock, Mockito.times(1)).findByEmailAndPassword("sympa@email.com", "P@ssword1");
+        assertEquals(clientResponseDTO, service.trouverClientParEmailEtPassword("sympa@email.com","P@ssword1"));
+        Mockito.verify(daoMock, Mockito.times(1)).findByEmailAndPassword("sympa@email.com","P@ssword1");
+    }
+
+
+    @Test
+    void testTrouverClientParEmailNonTrouve() {
+        Mockito.when(daoMock.findById("sympa@email.com")).thenReturn(Optional.empty());
+        assertThrows(ClientException.class, () -> service.trouver("sympa@email.com"));
+    }
+    @Test
+    void testTrouverClientParEmailOk() {
+        Client client1 = clientProfilPourTests();
+        ClientResponseDTO clientResponseDTO = clientResponseProfilPourTests2();
+        Mockito.when(daoMock.findById("sympa@email.com")).thenReturn(Optional.of(client1));
+        Mockito.when(mapperMock.toClientResponseDTO(client1)).thenReturn(clientResponseDTO);
+        assertEquals(clientResponseDTO, service.trouver("sympa@email.com"));
+        Mockito.verify(daoMock, Mockito.times(1)).findById("sympa@email.com");
     }
 
 
@@ -260,20 +276,6 @@ class ClientServiceImplTest {
 
     }
 
-    private static Client clientProfilPourTests2() {
-        Client c = new Client();
-        c.setAdresse(new Adresse(1, 15, "Rue JoeLeptit", "44800", "Saint-Herblain"));
-        c.setNom("Legrand");
-        c.setPrenom("Joel");
-        c.setDateDeNaissance(LocalDate.of(2002, 8, 12));
-        c.setDateInscription(LocalDate.of(2025, 8, 12));
-        c.setListePermis(Permis.B);
-        c.setDesactive(false);
-        c.setPassword("P@ssword3");
-        c.setEmail("ceciestuneemail@email.com");
-        return c;
-    }
-
 
     @Test
     void testModifierSansEmail(){
@@ -282,9 +284,69 @@ class ClientServiceImplTest {
     }
 
     @Test
+    void testModifierEmailBlank(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("", "P@ssword1", dto ));
+    }
+
+    @Test
     void testModifierSansPassword(){
         ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
         assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", null, dto ));
+    }
+
+    @Test
+    void testModifierPasswordBlank(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
+    }
+
+    @Test
+    void testModifierAdresseCodePostalNull(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", null, "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
+    }
+
+    @Test
+    void testModifierAdresseRueNull(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, null, "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
+    }
+
+    @Test
+    void testModifierAdresseNumeroNull(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(0, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
+    }
+
+    @Test
+    void testModifierDateDeNaissanceNull(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", null, LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
+    }
+
+    @Test
+    void testModifierDateInscriptionNull(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), null, permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
+    }
+
+    @Test
+    void testModifierPermisNull(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), null, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
+    }
+
+    @Test
+    void testModifierNomNull(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), null, "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
+    }
+
+    @Test
+    void testModifierPrenomNull(){
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(2, "Rue joe legrand", "44000", "Nantes"), "Legrand", null, LocalDate.now(), LocalDate.now(), null, false, "P@ssword1", "sympa@email.com");
+        assertThrows(ClientException.class, ()-> service.modifier("sympa@email.com", "", dto ));
     }
 
     @Test
@@ -301,5 +363,50 @@ class ClientServiceImplTest {
         service.modifier(client.getEmail(),client.getPassword(),clientRequestDTOUn());
     }
 
+    /* *********************************************** *
+     *                                                 *
+     *                 methodes privées                *
+     *                                                 *
+     * *********************************************** *
+     */
+
+
+    private  ClientRequestDTO clientRequestDTOUn(){
+
+        ClientRequestDTO dto = new ClientRequestDTO(new AdresseDTO(0, "Rue joe legrand", "44000", "Nantes"), "Legrand", "Joe", LocalDate.now(), LocalDate.now(), permis, false, "P@ssword1", "blablabla@mail.com");
+        return dto;
+    }
+
+    private static Client clientProfilPourTests() {
+        Client c = new Client();
+        c.setAdresse(new Adresse(1, 3, "Rue JoeLeptit", "44800", "Saint-Herblain"));
+        c.setNom("Legrand");
+        c.setPrenom("Joe");
+        c.setDateDeNaissance(LocalDate.of(2004, 8, 12));
+        c.setDateInscription(LocalDate.of(2025, 8, 12));
+        c.setListePermis(Permis.B);
+        c.setDesactive(false);
+        c.setPassword("P@ssword2");
+        c.setEmail("ceciestuneemail@email.com");
+        return c;
+    }
+
+    private static ClientResponseDTO creerClientResponseDTOExample() {
+        HashSet<Permis> permis1 = new HashSet<>();
+        permis1.add(Permis.B);
+        return new ClientResponseDTO(new AdresseDTO(3, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Jack", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "ceciestuneemail@email.com");
+    }
+
+
+    private static ClientResponseDTO creerClientResponseDTOExample2() {
+        HashSet<Permis> permis2 = new HashSet<>();
+        permis2.add(Permis.B);
+        return new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Legrand", "Joe", LocalDate.of(2004, 8, 12), LocalDate.of(2025, 8, 12), Permis.B, false, "emailfun@email.com");
+    }
+
+    private static ClientResponseDTO clientResponseProfilPourTests2() {
+        ClientResponseDTO a = new ClientResponseDTO(new AdresseDTO(12, "Rue JoeLeptit", "44800", "Saint-Herblain"), "Joestar", "Johnathan", LocalDate.of(2000, 11, 24), LocalDate.now(), Permis.B, false, "sympa@email.com");
+        return a;
+    }
 }
 

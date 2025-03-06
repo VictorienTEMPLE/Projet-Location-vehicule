@@ -25,11 +25,16 @@ public class ClientServiceImpl implements ClientService {
     }
 
     /**
-     * Méthode Ajouter(ClientRequestDTO clientRequestDTO)
+     * Ajoute un nouveau client à la base de données.
      *
-     * @param clientRequestDTO L'objet métier Client en base qui contient tous les attribus de Client
-     * @return retourne ClientResponseDTO
-     * @throws ClientException Si le client ne suis pas les contraintes établies pour l'inscription
+     * Cette méthode vérifie d'abord la validité des informations du client à l'aide de la méthode verifierClient.
+     * Ensuite, elle mappe les informations de l'objet {@link ClientRequestDTO} vers un objet {@link Client}.
+     * Le client est marqué comme actif (en définissant le champ `desactive` à `false`), puis enregistré dans la base de données.
+     * Enfin, un objet {@link ClientResponseDTO} représentant le client ajouté est retourné.
+     *
+     * @param clientRequestDTO L'objet contenant les informations du client à ajouter. Ne peut pas être null.
+     * @return Un objet {@link ClientResponseDTO} représentant le client ajouté, une fois enregistré dans la base de données.
+     * @throws ClientException Si les informations du client ne sont pas valides (par exemple, si des champs obligatoires sont manquants), une exception est lancée.
      */
     @Override
     public ClientResponseDTO ajouter(ClientRequestDTO clientRequestDTO) throws ClientException {
@@ -40,6 +45,17 @@ public class ClientServiceImpl implements ClientService {
         return clientMapper.toClientResponseDTO(clientRetour);
     }
 
+    /**
+     * Recherche un client par son email et retourne sa représentation sous forme de {@link ClientResponseDTO}.
+     *
+     * Cette méthode cherche un client dans la base de données en fonction de l'email fourni. Si le client est trouvé,
+     * il est converti en un objet {@link ClientResponseDTO} et retourné. Si aucun client correspondant n'est trouvé,
+     * une exception {@link ClientException} est lancée.
+     *
+     * @param email L'email du client à rechercher. Ne peut pas être null.
+     * @return Un objet {@link ClientResponseDTO} représentant le client trouvé.
+     * @throws ClientException Si aucun client n'est trouvé avec l'email donné, une exception est lancée avec un message approprié.
+     */
     @Override
     public ClientResponseDTO trouver(String email) throws ClientException {
         Optional<Client> optClient = clientDAO.findById(email);
@@ -48,6 +64,21 @@ public class ClientServiceImpl implements ClientService {
         return clientMapper.toClientResponseDTO(client);
     }
 
+    /**
+     * Modifie les informations d'un client en fonction de son email, mot de passe et des nouvelles données fournies.
+     *
+     * Cette méthode recherche un client existant dans la base de données en fonction de l'email et du mot de passe fournis.
+     * Si aucun client n'est trouvé, une exception {@link ClientException} est lancée.
+     * Ensuite, elle mappe les informations de `clientRequestDTO` dans un objet {@link Client},
+     * et met à jour les données de l'objet client existant. Les modifications sont ensuite enregistrées dans la base de données.
+     * Enfin, un objet {@link ClientResponseDTO} représentant le client mis à jour est retourné.
+     *
+     * @param email L'email du client à modifier. Ne peut pas être null ou vide.
+     * @param password Le mot de passe du client à modifier. Ne peut pas être null ou vide.
+     * @param clientRequestDTO L'objet contenant les nouvelles informations du client à mettre à jour.
+     * @return Un objet {@link ClientResponseDTO} représentant le client mis à jour.
+     * @throws ClientException Si aucun client n'est trouvé avec les paramètres fournis, une exception est lancée.
+     */
     @Override
     public ClientResponseDTO modifier(String email, String password, ClientRequestDTO clientRequestDTO) throws ClientException {
         Optional<Client> optClient = clientDAO.findByEmailAndPassword(email,password);
@@ -58,6 +89,26 @@ public class ClientServiceImpl implements ClientService {
         Client clientEnreg = clientDAO.save(clientExistant);
         return clientMapper.toClientResponseDTO(clientEnreg);
     }
+
+    /**
+     * Remplace les informations d'un client existant avec celles d'un nouveau client.
+     *
+     * Cette méthode met à jour l'objet `clientExistante` avec les valeurs présentes dans `nouveauclient`.
+     * Seules les valeurs non nulles ou valides sont prises en compte pour la mise à jour.
+     * Les informations suivantes sont mises à jour :
+     * <ul>
+     *     <li>Email</li>
+     *     <li>Mot de passe</li>
+     *     <li>Adresse (code postal, rue, numéro)</li>
+     *     <li>Date d'inscription (si la date de naissance est renseignée)</li>
+     *     <li>Liste des permis</li>
+     *     <li>Nom et prénom</li>
+     * </ul>
+     * Si une valeur correspondante dans `nouveauclient` est non nulle, elle remplace la valeur correspondante dans `clientExistante`.
+     *
+     * @param nouveauclient L'objet contenant les nouvelles informations à appliquer au client existant.
+     * @param clientExistante L'objet client existant qui sera mis à jour avec les informations de `nouveauclient`.
+     */
 
     private static void remplacer(Client nouveauclient, Client clientExistante) {
         if(nouveauclient.getEmail()!=null)
@@ -79,11 +130,17 @@ public class ClientServiceImpl implements ClientService {
         if (nouveauclient.getPrenom() !=null)
             clientExistante.setPrenom(nouveauclient.getPrenom());
     }
+
     /**
-     * Méthode supprimer(String email, String password)
-     * @param email Requiert un string email pour trouver l'objet correspondant en base
-     * @param password Requiert un string password pour trouver l'objet correspondant en base
-     * @throws ClientException renvoie une clientException si les contraintes ne sont pas suivies
+     * Supprime un client en fonction de son email et de son mot de passe.
+     *
+     * Cette méthode recherche un client dans la base de données à l'aide de l'email et du mot de passe fournis.
+     * Si aucun client correspondant n'est trouvé, une exception {@link ClientException} est lancée.
+     * Si le client est trouvé, il est supprimé de la base de données via clientDAO.
+     *
+     * @param email L'email du client à supprimer. Ne peut pas être null ou vide.
+     * @param password Le mot de passe du client à supprimer. Ne peut pas être null ou vide.
+     * @throws ClientException Si aucun client n'est trouvé avec les paramètres fournis, une exception est lancée.
      */
     @Override
     public void supprimer(String email, String password) throws ClientException {
@@ -93,8 +150,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     /**
-     * méthode Liste()
-     * @return retourne la lister complète de tous les objet Client en base
+     * Récupère la liste de tous les clients et les convertit en objets {@link ClientResponseDTO}.
+     *
+     * Cette méthode utilise clientDAO pour récupérer tous les clients présents dans la base de données.
+     * Ensuite, chaque objet {@link Client} est converti en un objet {@link ClientResponseDTO} à l'aide de clientMapper.
+     * La liste des {@link ClientResponseDTO} est ensuite renvoyée.
+     *
+     * @return Une liste de {@link ClientResponseDTO} représentant tous les clients dans la base de données.
      */
     @Override
     public List<ClientResponseDTO> lister() {
@@ -105,10 +167,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
     /**
-     * Méthode trouverClientParEmailEtPassword(String email, String password)
-     * @param email requiert un paramètre String email
-     * @param password requiert un paramètre String password
-     * @return retourne l'objet client correspondant aux String email et String password donné.
+     * Recherche un client en fonction de son email et de son mot de passe.
+     *
+     * Cette méthode vérifie d'abord si l'email et le mot de passe sont fournis. Si l'un d'eux est absent ou vide, une exception {@link ClientException} est lancée.
+     * Ensuite, elle effectue une recherche dans la base de données via le  clientDAO pour trouver un client correspondant à l'email et au mot de passe fournis.
+     * Si aucun client n'est trouvé, une exception {@link ClientException} est lancée.
+     * Si un client est trouvé, il est converti en {@link ClientResponseDTO} à l'aide du clientMapper et retourné.
+     *
+     * @param email L'email du client à rechercher. Ne peut pas être null ou vide.
+     * @param password Le mot de passe du client à rechercher. Ne peut pas être null ou vide.
+     * @return Un objet {@link ClientResponseDTO} représentant le client trouvé.
+     * @throws ClientException Si l'email ou le mot de passe est manquant, ou si aucun client n'est trouvé pour les paramètres fournis.
      */
 
     @Override

@@ -25,7 +25,7 @@ public class Vehicule {
     private Boolean climatisation;
     private Boolean actif;
     private Boolean retireDuParc;
-    private double TarifJournalierDeBase;
+    private double tarifJournalierDeBase;
     @Enumerated(EnumType.STRING)
     private Permis permis;
 }

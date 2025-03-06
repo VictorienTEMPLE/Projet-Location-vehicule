@@ -22,7 +22,7 @@ public class Utilitaire extends Vehicule {
     private int nbPlaces;
     private int nbBagages;
     private double chargeMax;
-    private int ptac;
+    private double ptac;
     private int capacite;
     private Transmission transmission;
     private TypeCarburant carburant;

@@ -1,7 +1,7 @@
 package com.accenture.service.dto;
 
-import com.accenture.repository.entity.Voiture;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record VehiculeDTO(
@@ -9,4 +9,7 @@ public record VehiculeDTO(
         List<UtilitaireResponseDTO> listeUtilitaire
 
 ) {
+    public VehiculeDTO() {
+      this(new ArrayList<>(),new ArrayList<>());
+    }
 }

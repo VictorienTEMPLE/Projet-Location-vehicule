@@ -40,7 +40,7 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping
+    @PatchMapping
     ResponseEntity<ClientResponseDTO> modifier(String email, String password,@RequestBody ClientRequestDTO clientRequestDTO){
         clientService.modifier(email, password, clientRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
