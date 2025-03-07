@@ -1,8 +1,8 @@
 package com.accenture.controller;
 
 import com.accenture.service.ClientService;
-import com.accenture.service.dto.ClientRequestDTO;
-import com.accenture.service.dto.ClientResponseDTO;
+import com.accenture.service.dto.RequestDTO.ClientRequestDTO;
+import com.accenture.service.dto.ResponseDTO.ClientResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

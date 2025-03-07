@@ -1,7 +1,5 @@
-package com.accenture.service.dto;
+package com.accenture.service.dto.RequestDTO;
 
-import com.accenture.repository.entity.Client;
-import com.accenture.repository.entity.Vehicule;
 import com.accenture.shared.EtatLocation;
 
 import java.time.LocalDate;

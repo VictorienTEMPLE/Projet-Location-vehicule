@@ -1,9 +1,9 @@
-package com.accenture.service.dto;
+package com.accenture.service.dto.RequestDTO;
 
+import com.accenture.service.dto.AdresseDTO;
 import com.accenture.shared.Permis;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 
 public record ClientRequestDTO(
          AdresseDTO adresse,

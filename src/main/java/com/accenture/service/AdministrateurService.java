@@ -2,8 +2,8 @@ package com.accenture.service;
 
 import com.accenture.exception.AdministrateurException;
 import com.accenture.exception.ClientException;
-import com.accenture.service.dto.AdministrateurRequestDTO;
-import com.accenture.service.dto.AdministrateurResponseDTO;
+import com.accenture.service.dto.RequestDTO.AdministrateurRequestDTO;
+import com.accenture.service.dto.ResponseDTO.AdministrateurResponseDTO;
 
 import java.util.List;
 

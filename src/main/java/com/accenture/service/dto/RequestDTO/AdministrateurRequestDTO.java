@@ -1,4 +1,4 @@
-package com.accenture.service.dto;
+package com.accenture.service.dto.RequestDTO;
 
 public record AdministrateurRequestDTO(
         String nom,

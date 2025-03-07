@@ -1,9 +1,4 @@
-package com.accenture.service.dto;
-
-import com.accenture.shared.Permis;
-
-import java.time.LocalDate;
-import java.util.HashSet;
+package com.accenture.service.dto.ResponseDTO;
 
 public record AdministrateurResponseDTO(
         String nom,

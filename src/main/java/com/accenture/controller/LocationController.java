@@ -2,11 +2,9 @@ package com.accenture.controller;
 
 import com.accenture.service.LocationService;
 
-import com.accenture.service.dto.LocationRequestDTO;
-import com.accenture.service.dto.LocationResponseDTO;
+import com.accenture.service.dto.RequestDTO.LocationRequestDTO;
 import com.accenture.service.dto.VehiculeDTO;
 import com.accenture.shared.FiltreRechercheVehicule;
-import com.accenture.shared.TypeVehicule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

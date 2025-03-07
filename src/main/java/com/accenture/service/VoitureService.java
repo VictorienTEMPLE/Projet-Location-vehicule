@@ -2,8 +2,8 @@ package com.accenture.service;
 
 
 import com.accenture.exception.VehiculeException;
-import com.accenture.service.dto.VoitureRequestDTO;
-import com.accenture.service.dto.VoitureResponseDTO;
+import com.accenture.service.dto.RequestDTO.VoitureRequestDTO;
+import com.accenture.service.dto.ResponseDTO.VoitureResponseDTO;
 import com.accenture.shared.FiltreRechercheVehicule;
 
 import java.util.List;

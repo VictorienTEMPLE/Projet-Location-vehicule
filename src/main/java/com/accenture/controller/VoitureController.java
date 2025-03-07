@@ -1,9 +1,9 @@
 package com.accenture.controller;
 
 import com.accenture.service.VoitureService;
-import com.accenture.service.dto.VoitureRequestDTO;
-import com.accenture.service.dto.ClientResponseDTO;
-import com.accenture.service.dto.VoitureResponseDTO;
+import com.accenture.service.dto.RequestDTO.VoitureRequestDTO;
+import com.accenture.service.dto.ResponseDTO.ClientResponseDTO;
+import com.accenture.service.dto.ResponseDTO.VoitureResponseDTO;
 import com.accenture.shared.FiltreRechercheVehicule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

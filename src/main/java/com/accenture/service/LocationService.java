@@ -1,8 +1,8 @@
 package com.accenture.service;
 
 import com.accenture.exception.VehiculeException;
-import com.accenture.service.dto.LocationRequestDTO;
-import com.accenture.service.dto.LocationResponseDTO;
+import com.accenture.service.dto.RequestDTO.LocationRequestDTO;
+import com.accenture.service.dto.ResponseDTO.LocationResponseDTO;
 import com.accenture.service.dto.VehiculeDTO;
 import com.accenture.shared.FiltreRechercheVehicule;
 

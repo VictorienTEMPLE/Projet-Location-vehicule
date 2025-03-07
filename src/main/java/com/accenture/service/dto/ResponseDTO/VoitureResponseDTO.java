@@ -1,21 +1,17 @@
-package com.accenture.service.dto;
+package com.accenture.service.dto.ResponseDTO;
 
-import com.accenture.shared.Permis;
 import com.accenture.shared.Transmission;
 import com.accenture.shared.TypeCarburant;
 import com.accenture.shared.TypeVehicule;
 
-import java.util.HashSet;
-
-public record UtilitaireResponseDTO(
+public record VoitureResponseDTO(
         String modele,
         String marque,
         String couleur,
         int nbPlaces,
+        int nbPortes,
         int nbBagages,
-        double chargeMax,
-        double ptac,
-        int capacite,
+        int kilometrage,
         double tarifJournalierDeBase,
         Transmission transmission,
         TypeCarburant carburant,

@@ -1,9 +1,8 @@
 package com.accenture.service;
 
 import com.accenture.exception.VehiculeException;
-import com.accenture.repository.entity.Utilitaire;
-import com.accenture.service.dto.UtilitaireRequestDTO;
-import com.accenture.service.dto.UtilitaireResponseDTO;
+import com.accenture.service.dto.RequestDTO.UtilitaireRequestDTO;
+import com.accenture.service.dto.ResponseDTO.UtilitaireResponseDTO;
 import com.accenture.shared.FiltreRechercheVehicule;
 
 

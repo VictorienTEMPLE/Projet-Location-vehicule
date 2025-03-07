@@ -1,12 +1,10 @@
 package com.accenture.controller;
 
 import com.accenture.service.AdministrateurService;
-import com.accenture.service.dto.AdministrateurRequestDTO;
-import com.accenture.service.dto.AdministrateurResponseDTO;
+import com.accenture.service.dto.RequestDTO.AdministrateurRequestDTO;
+import com.accenture.service.dto.ResponseDTO.AdministrateurResponseDTO;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

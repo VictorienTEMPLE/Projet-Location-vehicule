@@ -1,11 +1,8 @@
-package com.accenture.service.dto;
+package com.accenture.service.dto.RequestDTO;
 
-import com.accenture.shared.Permis;
 import com.accenture.shared.Transmission;
 import com.accenture.shared.TypeCarburant;
 import com.accenture.shared.TypeVehicule;
-
-import java.util.HashSet;
 
 public record UtilitaireRequestDTO (
      int id,

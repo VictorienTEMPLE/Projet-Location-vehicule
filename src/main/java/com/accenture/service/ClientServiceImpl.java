@@ -3,10 +3,9 @@ package com.accenture.service;
 import com.accenture.exception.ClientException;
 import com.accenture.repository.ClientDAO;
 import com.accenture.repository.entity.Client;
-import com.accenture.service.dto.ClientRequestDTO;
-import com.accenture.service.dto.ClientResponseDTO;
+import com.accenture.service.dto.RequestDTO.ClientRequestDTO;
+import com.accenture.service.dto.ResponseDTO.ClientResponseDTO;
 import com.accenture.service.mapper.ClientMapper;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

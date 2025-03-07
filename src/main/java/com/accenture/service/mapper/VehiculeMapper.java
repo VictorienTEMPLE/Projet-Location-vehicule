@@ -3,15 +3,13 @@ package com.accenture.service.mapper;
 import com.accenture.repository.entity.Utilitaire;
 import com.accenture.repository.entity.Vehicule;
 import com.accenture.repository.entity.Voiture;
-import com.accenture.service.dto.UtilitaireResponseDTO;
+import com.accenture.service.dto.ResponseDTO.UtilitaireResponseDTO;
 import com.accenture.service.dto.VehiculeDTO;
-import com.accenture.service.dto.VoitureResponseDTO;
-import org.springframework.context.annotation.Bean;
+import com.accenture.service.dto.ResponseDTO.VoitureResponseDTO;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 @Component
 public class VehiculeMapper {
     //creer deux liste de utilitaire et voiture, boucler sur la liste

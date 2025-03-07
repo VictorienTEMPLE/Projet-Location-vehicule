@@ -3,8 +3,8 @@ package com.accenture.service;
 import com.accenture.exception.AdministrateurException;
 import com.accenture.repository.AdministrateurDAO;
 import com.accenture.repository.entity.Administrateur;
-import com.accenture.service.dto.AdministrateurRequestDTO;
-import com.accenture.service.dto.AdministrateurResponseDTO;
+import com.accenture.service.dto.RequestDTO.AdministrateurRequestDTO;
+import com.accenture.service.dto.ResponseDTO.AdministrateurResponseDTO;
 import com.accenture.service.mapper.AdministrateurMapper;
 import org.springframework.stereotype.Service;
 

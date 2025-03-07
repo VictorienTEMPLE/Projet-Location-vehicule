@@ -1,11 +1,10 @@
 package com.accenture.service.mapper;
 
-import com.accenture.repository.entity.Client;
 import com.accenture.repository.entity.Vehicule;
 import com.accenture.repository.entity.Voiture;
 import com.accenture.service.dto.VehiculeDTO;
-import com.accenture.service.dto.VoitureRequestDTO;
-import com.accenture.service.dto.VoitureResponseDTO;
+import com.accenture.service.dto.RequestDTO.VoitureRequestDTO;
+import com.accenture.service.dto.ResponseDTO.VoitureResponseDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;

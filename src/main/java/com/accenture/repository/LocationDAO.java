@@ -1,8 +1,7 @@
 package com.accenture.repository;
 
 import com.accenture.repository.entity.Location;
-import com.accenture.service.dto.LocationResponseDTO;
-import com.accenture.shared.TypeVehicule;
+import com.accenture.service.dto.ResponseDTO.LocationResponseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
