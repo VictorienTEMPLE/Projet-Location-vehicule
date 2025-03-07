@@ -52,4 +52,12 @@ public class AdministrateurController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @DeleteMapping
+    ResponseEntity<Void> delete( String email, String password){
+        log.info("Administrateur a supprimer : email {} ", email);
+        administrateurService.supprimer(email, password);
+        log.info("Administrateur avec email {}  supprimé avec succès.", email);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
